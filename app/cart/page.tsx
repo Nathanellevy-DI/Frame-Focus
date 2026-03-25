@@ -245,10 +245,19 @@ export default function CartPage() {
 
                 <button
                   onClick={handleCheckout}
-                  disabled={!email || !email.includes('@') || !shipping.name || !shipping.address || items.length === 0}
-                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50"
+                  disabled={
+                    !email || 
+                    !email.includes('@') || 
+                    !shipping.name || 
+                    !shipping.address || 
+                    !shipping.city || 
+                    !shipping.state || 
+                    !shipping.zip ||
+                    items.length === 0
+                  }
+                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Proceed to Checkout
+                  {items.length === 0 ? 'Bag is Empty' : 'Proceed to Checkout'}
                 </button>
 
                 <button
