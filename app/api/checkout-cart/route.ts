@@ -51,12 +51,34 @@ export async function POST(req: Request) {
     // Record pending order in DB
     if (paymentLink?.id) {
       const supabase = await createClient()
-      await supabase.from('orders').insert({
-        customer_email: 'pending@checkout',
-        stripe_session_id: paymentLink.id, // Re-using column for Square ID
-        total_amount: totalAmount,
-        status: 'pending'
-      })
+      
+      // 1. Create the main order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          customer_email: 'pending@checkout',
+          stripe_session_id: paymentLink.id,
+          total_amount: totalAmount,
+          status: 'pending'
+        })
+        .select()
+        .single()
+
+      if (orderError) throw orderError
+
+      // 2. Create the itemized records
+      const itemRecords = items.map((item: any) => ({
+        order_id: orderData.id,
+        product_id: item.id,
+        quantity: item.qty,
+        price_at_purchase: item.price
+      }))
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(itemRecords)
+
+      if (itemsError) throw itemsError
     }
 
     return NextResponse.json({ url: paymentLink?.url })
