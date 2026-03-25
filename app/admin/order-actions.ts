@@ -22,10 +22,11 @@ export async function deleteOrder(orderId: string) {
 }
 
 export async function updateOrderStatus(orderId: string, status: string) {
+  console.log(`🔄 Updating Order Status: ${orderId} -> ${status}`);
   try {
     const supabase = await createClient()
     
-    // 1. Update status
+    // 1. Update status and get email
     const { data: order, error } = await supabase
       .from('orders')
       .update({ status })
@@ -33,22 +34,31 @@ export async function updateOrderStatus(orderId: string, status: string) {
       .select('customer_email')
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error("❌ Supabase Update Error:", error);
+      throw error;
+    }
     
+    console.log(`📧 Customer Email from DB: ${order?.customer_email}`);
+
     // 2. Send email notification
     if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+      console.log(`🚀 Triggering Email to: ${order.customer_email}`);
       await sendOrderStatusEmail(order.customer_email, orderId, status)
+    } else {
+      console.warn("⚠️ No valid customer email found. Skipping email.");
     }
 
     revalidatePath('/admin')
     return { success: true }
   } catch (error: any) {
-    console.error("Order update error:", error)
+    console.error("💥 Order update CRITICAL error:", error)
     return { success: false, error: error.message }
   }
 }
 
 export async function updateOrderTracking(orderId: string, trackingNumber: string) {
+  console.log(`🔄 Updating Tracking: ${orderId} -> ${trackingNumber}`);
   try {
     const supabase = await createClient()
     
@@ -60,17 +70,23 @@ export async function updateOrderTracking(orderId: string, trackingNumber: strin
       .select('customer_email')
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error("❌ Supabase Tracking Update Error:", error);
+      throw error;
+    }
 
     // 2. Send tracking email
     if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+      console.log(`🚀 Triggering Tracking Email to: ${order.customer_email}`);
       await sendOrderTrackingEmail(order.customer_email, orderId, trackingNumber)
+    } else {
+      console.warn("⚠️ No valid customer email found for tracking. Skipping email.");
     }
     
     revalidatePath('/admin')
     return { success: true }
   } catch (error: any) {
-    console.error("Tracking update error:", error)
+    console.error("💥 Tracking update CRITICAL error:", error)
     return { success: false, error: error.message }
   }
 }
