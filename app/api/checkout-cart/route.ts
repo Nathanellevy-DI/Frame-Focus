@@ -86,7 +86,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: paymentLink?.url })
   } catch (error: any) {
-    console.error('Square checkout error:', error)
-    return NextResponse.json({ error: 'Checkout failed' }, { status: 500 })
+    return NextResponse.json({ 
+      error: error.message || 'Server error during checkout. Please check your environment variables.',
+      details: error.response?.text || error.toString()
+    }, { status: 500 })
   }
 }
