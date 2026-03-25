@@ -64,7 +64,14 @@ export default function AdminProductForm() {
         ref={formRef}
         action={async (formData) => {
           formData.set('imageUrl', imageUrl)
-          await addProduct(formData)
+          const result = await addProduct(formData)
+          
+          if (!result.success) {
+            alert(`Error: ${result.error}`)
+            return
+          }
+          
+          alert("Product added successfully!")
           formRef.current?.reset()
           setPreview(null)
           setImageUrl('')
