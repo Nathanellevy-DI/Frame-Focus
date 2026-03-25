@@ -135,6 +135,8 @@ export default async function AdminPage() {
               )}
             </div>
           </section>
+        </div>
+      </div>
     </main>
   )
 }
