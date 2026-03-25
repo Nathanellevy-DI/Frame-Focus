@@ -3,6 +3,7 @@ import { logoutAction } from '@/app/admin/auth-actions'
 import { createClient } from '@/utils/supabase/server'
 import OrderDeleteButton from '@/components/OrderDeleteButton'
 import OrderStatusSelect from '@/components/OrderStatusSelect'
+import OrderTrackingInput from '@/components/OrderTrackingInput'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,13 +93,17 @@ export default async function AdminPage() {
                       </div>
 
                       {/* Shipping Info */}
-                      {(order.customer_name || order.shipping_address || order.phone_number) && (
+                      {(order.customer_name || order.shipping_address || order.phone_number || order.tracking_number) && (
                         <div className="bg-gray-50 p-6 mb-6 border-l-4 border-black border border-gray-100">
                           <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-4 text-gray-400 bg-white inline-block px-2">Fulfillment Data</p>
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-3 text-[11px] font-black uppercase tracking-tight">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 text-[11px] font-black uppercase tracking-tight">
                             {order.customer_name && <div><span className="text-gray-400 mr-2">NAME:</span> {order.customer_name}</div>}
                             {order.phone_number && <div><span className="text-gray-400 mr-2">PHONE:</span> {order.phone_number}</div>}
-                            {order.shipping_address && <div className="lg:col-span-2 leading-relaxed mt-2 p-3 bg-white border border-gray-100"><span className="text-gray-400 mr-2">DESTINATION:</span> {order.shipping_address}</div>}
+                            {order.shipping_address && <div className="lg:col-span-2 leading-relaxed p-3 bg-white border border-gray-100"><span className="text-gray-400 mr-2">DESTINATION:</span> {order.shipping_address}</div>}
+                            
+                            <div className="lg:col-span-2 border-t border-gray-200 pt-4">
+                              <OrderTrackingInput orderId={order.id} initialValue={order.tracking_number} />
+                            </div>
                           </div>
                         </div>
                       )}

@@ -40,3 +40,22 @@ export async function updateOrderStatus(orderId: string, status: string) {
     return { success: false, error: error.message }
   }
 }
+
+export async function updateOrderTracking(orderId: string, trackingNumber: string) {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase
+      .from('orders')
+      .update({ tracking_number: trackingNumber })
+      .eq('id', orderId)
+
+    if (error) throw error
+    
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (error: any) {
+    console.error("Tracking update error:", error)
+    return { success: false, error: error.message }
+  }
+}
+
