@@ -3,18 +3,16 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+import { sendOrderStatusEmail, sendOrderTrackingEmail } from '@/lib/email-service'
+
 export async function deleteOrder(orderId: string) {
   try {
     const supabase = await createClient()
-    
-    // Deleting the order will automatically delete order_items due to CASCADE in schema.sql
     const { error } = await supabase
       .from('orders')
       .delete()
       .eq('id', orderId)
-
     if (error) throw error
-    
     revalidatePath('/admin')
     return { success: true }
   } catch (error: any) {
@@ -26,13 +24,22 @@ export async function deleteOrder(orderId: string) {
 export async function updateOrderStatus(orderId: string, status: string) {
   try {
     const supabase = await createClient()
-    const { error } = await supabase
+    
+    // 1. Update status
+    const { data: order, error } = await supabase
       .from('orders')
       .update({ status })
       .eq('id', orderId)
+      .select('customer_email')
+      .single()
 
     if (error) throw error
     
+    // 2. Send email notification
+    if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+      await sendOrderStatusEmail(order.customer_email, orderId, status)
+    }
+
     revalidatePath('/admin')
     return { success: true }
   } catch (error: any) {
@@ -44,12 +51,21 @@ export async function updateOrderStatus(orderId: string, status: string) {
 export async function updateOrderTracking(orderId: string, trackingNumber: string) {
   try {
     const supabase = await createClient()
-    const { error } = await supabase
+    
+    // 1. Update tracking
+    const { data: order, error } = await supabase
       .from('orders')
       .update({ tracking_number: trackingNumber })
       .eq('id', orderId)
+      .select('customer_email')
+      .single()
 
     if (error) throw error
+
+    // 2. Send tracking email
+    if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+      await sendOrderTrackingEmail(order.customer_email, orderId, trackingNumber)
+    }
     
     revalidatePath('/admin')
     return { success: true }

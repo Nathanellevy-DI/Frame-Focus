@@ -1,17 +1,24 @@
 'use client'
 
+import { useState } from 'react'
 import { useCart } from '@/components/CartProvider'
 import Link from 'next/link'
 
 export default function CartPage() {
   const { items, removeItem, updateQty, totalPrice, clearCart } = useCart()
+  const [email, setEmail] = useState('')
 
   async function handleCheckout() {
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email for delivery updates.')
+      return
+    }
+
     try {
       const res = await fetch('/api/checkout-cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, email }),
       })
       const data = await res.json()
       if (data.url) {
@@ -128,14 +135,27 @@ export default function CartPage() {
                   <span className="text-xs uppercase tracking-widest text-gray-500">Shipping</span>
                   <span className="text-sm font-bold uppercase tracking-widest text-green-600">Complimentary</span>
                 </div>
-                <div className="flex justify-between items-center pt-2">
+                <div className="flex justify-between items-center pt-2 pb-6 border-b-2 border-black">
                   <span className="text-sm font-black uppercase tracking-widest">Total</span>
                   <span className="text-3xl font-black tracking-tighter">${totalPrice.toFixed(2)}</span>
                 </div>
 
+                <div className="flex flex-col gap-2 mt-8">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Email for Delivery Updates</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="E.g. alex@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors text-black"
+                  />
+                </div>
+
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-6"
+                  disabled={!email || !email.includes('@') || items.length === 0}
+                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50"
                 >
                   Proceed to Checkout
                 </button>

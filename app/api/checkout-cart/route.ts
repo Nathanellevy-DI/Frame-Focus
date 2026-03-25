@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       environment: SquareEnvironment.Production,
     })
 
-    const { items } = await req.json()
+    const { items, email } = await req.json()
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
-          customer_email: 'pending@checkout',
+          customer_email: email || 'pending@checkout',
           stripe_session_id: paymentLink.id,
           total_amount: totalAmount,
           status: 'pending'
