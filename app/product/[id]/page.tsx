@@ -1,0 +1,99 @@
+import sql from '@/lib/db'
+import { notFound } from 'next/navigation'
+import AddToCartButton from '@/components/AddToCartButton'
+import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
+
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
+  const products = await sql`SELECT * FROM products WHERE id = ${id} LIMIT 1`
+  const product = products[0]
+
+  if (!product) return notFound()
+
+  return (
+    <main className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
+      {/* Back nav */}
+      <div className="border-b-2 border-black">
+        <div className="max-w-7xl mx-auto px-8 py-4 flex justify-between items-center">
+          <Link href="/" className="text-sm font-black uppercase tracking-widest hover:underline">
+            ← Back to Gallery
+          </Link>
+          <Link href="/" className="text-2xl font-black uppercase tracking-tighter">
+            Frame &amp; Focus
+          </Link>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+          {/* Product Image */}
+          <div className="aspect-[3/4] bg-gray-100 overflow-hidden shadow-2xl">
+            <img
+              src={product.image_url}
+              alt={product.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Product Details */}
+          <div className="flex flex-col justify-center">
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-400 mb-4">
+              {product.category || 'Fine Art Print'}
+            </p>
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6">
+              {product.title}
+            </h1>
+            
+            {product.description && (
+              <p className="text-lg text-gray-600 leading-relaxed mb-8 border-l-4 border-black pl-6">
+                {product.description}
+              </p>
+            )}
+
+            <div className="border-t-2 border-b-2 border-black py-6 mb-8">
+              <p className="text-4xl font-black tracking-tighter">
+                ${parseFloat(product.price).toFixed(2)}
+              </p>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">Free worldwide shipping</p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span className="text-xs uppercase tracking-widest text-gray-500">
+                  {product.is_available ? 'In Stock — Ready to Ship' : 'Sold Out'}
+                </span>
+              </div>
+            </div>
+
+            {/* Add to Cart / Buy Now Buttons */}
+            <AddToCartButton product={{
+              id: product.id,
+              title: product.title,
+              price: product.price,
+              image_url: product.image_url,
+            }} />
+
+            <div className="mt-12 space-y-4 border-t border-gray-200 pt-8">
+              <div className="flex items-start gap-3">
+                <span className="text-sm">🖼</span>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Museum-quality giclée print on archival paper</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-sm">📦</span>
+                <p className="text-xs uppercase tracking-widest text-gray-500">Ships within 2–5 business days</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-sm">↩️</span>
+                <p className="text-xs uppercase tracking-widest text-gray-500">30-day satisfaction guarantee</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
