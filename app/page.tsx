@@ -1,4 +1,4 @@
-import sql from '@/lib/db'
+import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import StorefrontGrid from '@/components/StorefrontGrid'
 
@@ -7,7 +7,15 @@ export const dynamic = 'force-dynamic'
 export default async function ShopPage() {
   let products: any[] = [];
   try {
-    products = await sql`SELECT * FROM products WHERE is_available = true ORDER BY created_at DESC;`
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_available', true)
+      .order('created_at', { ascending: false })
+      
+    if (error) throw error
+    if (data) products = data
   } catch (err) {
     console.error("Database error:", err);
   }

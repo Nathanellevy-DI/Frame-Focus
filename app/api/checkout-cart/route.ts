@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { SquareClient, SquareEnvironment } from 'square'
 import crypto from 'crypto'
-import sql from '@/lib/db'
+import { createClient } from '@/utils/supabase/server'
 
 export async function POST(req: Request) {
   try {
@@ -50,10 +50,13 @@ export async function POST(req: Request) {
 
     // Record pending order in DB
     if (paymentLink?.id) {
-      await sql`
-        INSERT INTO orders (customer_email, stripe_session_id, total_amount, status)
-        VALUES ('pending@checkout', ${paymentLink.id}, ${totalAmount}, 'pending')
-      `
+      const supabase = await createClient()
+      await supabase.from('orders').insert({
+        customer_email: 'pending@checkout',
+        stripe_session_id: paymentLink.id, // Re-using column for Square ID
+        total_amount: totalAmount,
+        status: 'pending'
+      })
     }
 
     return NextResponse.json({ url: paymentLink?.url })
