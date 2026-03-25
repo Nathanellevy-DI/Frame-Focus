@@ -174,7 +174,7 @@ export default function CartPage() {
                 </div>
 
                 {/* Shipping Info Section */}
-                <div className="mt-12 space-y-6 pt-12 border-t-4 border-black">
+                <div className="mt-12 space-y-6 pt-12 border-t-4 border-black text-black">
                   <h2 className="text-2xl font-black uppercase tracking-tighter">Shipping Information</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -234,7 +234,7 @@ export default function CartPage() {
                       </div>
                     </div>
 
-                    <div className="md:col-span-2 shadow-sm">
+                    <div className="md:col-span-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Phone Number (For Carrier Updates)</label>
                       <input
                         type="tel"
@@ -247,7 +247,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 mt-8">
+                <div className="flex flex-col gap-2 mt-8 text-black">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Email for Delivery Notifications</label>
                   <input
                     type="email"

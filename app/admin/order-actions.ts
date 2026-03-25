@@ -2,9 +2,11 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-
 import { sendOrderStatusEmail, sendOrderTrackingEmail } from '@/lib/email-service'
 
+/**
+ * Deletes an order from the database.
+ */
 export async function deleteOrder(orderId: string) {
   try {
     const supabase = await createClient()
@@ -12,7 +14,9 @@ export async function deleteOrder(orderId: string) {
       .from('orders')
       .delete()
       .eq('id', orderId)
+    
     if (error) throw error
+    
     revalidatePath('/admin')
     return { success: true }
   } catch (error: any) {
@@ -21,6 +25,9 @@ export async function deleteOrder(orderId: string) {
   }
 }
 
+/**
+ * Updates an order status and triggers an automated email notification.
+ */
 export async function updateOrderStatus(orderId: string, status: string) {
   console.log(`🔄 Updating Order Status: ${orderId} -> ${status}`);
   try {
@@ -41,8 +48,8 @@ export async function updateOrderStatus(orderId: string, status: string) {
     
     console.log(`📧 Customer Email from DB: ${order?.customer_email}`);
 
-    // 2. Send email notification
-    if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+    // 2. Send email notification if valid email exists
+    if (order?.customer_email && order.customer_email !== 'pending@checkout' && order.customer_email.includes('@')) {
       console.log(`🚀 Triggering Email to: ${order.customer_email}`);
       await sendOrderStatusEmail(order.customer_email, orderId, status)
     } else {
@@ -57,6 +64,9 @@ export async function updateOrderStatus(orderId: string, status: string) {
   }
 }
 
+/**
+ * Updates an order's tracking number and triggers an automated shipping update email.
+ */
 export async function updateOrderTracking(orderId: string, trackingNumber: string) {
   console.log(`🔄 Updating Tracking: ${orderId} -> ${trackingNumber}`);
   try {
@@ -75,8 +85,8 @@ export async function updateOrderTracking(orderId: string, trackingNumber: strin
       throw error;
     }
 
-    // 2. Send tracking email
-    if (order?.customer_email && order.customer_email !== 'pending@checkout') {
+    // 2. Send tracking email if valid email exists
+    if (order?.customer_email && order.customer_email !== 'pending@checkout' && order.customer_email.includes('@')) {
       console.log(`🚀 Triggering Tracking Email to: ${order.customer_email}`);
       await sendOrderTrackingEmail(order.customer_email, orderId, trackingNumber)
     } else {
@@ -90,4 +100,3 @@ export async function updateOrderTracking(orderId: string, trackingNumber: strin
     return { success: false, error: error.message }
   }
 }
-

@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import OrderDeleteButton from '@/components/OrderDeleteButton'
 import OrderStatusSelect from '@/components/OrderStatusSelect'
 import OrderTrackingInput from '@/components/OrderTrackingInput'
+import { revalidatePath } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,7 +93,7 @@ export default async function AdminPage() {
                         </div>
                       </div>
 
-                      {/* Shipping info will show if available */}
+                      {/* Shipping Details */}
                       {(order.customer_name || order.shipping_address || order.phone_number) && (
                         <div className="bg-gray-50 p-6 mb-4 border-l-4 border-black border border-gray-100">
                           <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-4 text-gray-400 bg-white inline-block px-2">Shipping Details</p>
@@ -104,7 +105,7 @@ export default async function AdminPage() {
                         </div>
                       )}
 
-                      {/* Tracking number entry (Always Visible) */}
+                      {/* Tracking Section */}
                       <div className="mb-8 p-6 bg-gray-50/50 border border-gray-100">
                         <OrderTrackingInput orderId={order.id} initialValue={order.tracking_number} />
                       </div>
@@ -112,7 +113,7 @@ export default async function AdminPage() {
                       {/* Items List */}
                       <div className="grid grid-cols-1 gap-4">
                         {order.order_items?.map((item: any) => (
-                          <div key={item.id} className="flex items-center gap-6 bg-white border border-gray-100 p-4 hover:border-black transition-all group">
+                          <div key={item.id} className="flex items-center gap-6 bg-white border border-gray-100 p-4 hover:border-black transition-all group shadow-sm">
                             <div className="w-16 h-20 bg-gray-50 flex-shrink-0 border border-gray-100 overflow-hidden shadow-sm">
                               {item.products?.image_url ? (
                                 <img 
