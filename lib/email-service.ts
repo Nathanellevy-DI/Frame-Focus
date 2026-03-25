@@ -19,8 +19,8 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
   const message = statusMessages[status] || `Your order status has been updated to: ${status}`
 
   try {
-    await resend.emails.send({
-      from: 'Orders <orders@framefocus.com>',
+    const { data, error } = await resend.emails.send({
+      from: 'Resend <onboarding@resend.dev>',
       to: email,
       subject: `Update on Order ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: `
@@ -38,8 +38,14 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
         </div>
       `
     })
+
+    if (error) {
+      console.error("Resend API Error (Status Update):", error)
+    } else {
+      console.log("Status update email sent:", data?.id)
+    }
   } catch (error) {
-    console.error("Failed to send email:", error)
+    console.error("Failed to send status email:", error)
   }
 }
 
@@ -47,8 +53,8 @@ export async function sendOrderTrackingEmail(email: string, orderId: string, tra
   if (!process.env.RESEND_API_KEY) return
 
   try {
-    await resend.emails.send({
-      from: 'Orders <orders@framefocus.com>',
+    const { data, error } = await resend.emails.send({
+      from: 'Resend <onboarding@resend.dev>',
       to: email,
       subject: `Tracking Added: Order ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: `
@@ -65,6 +71,12 @@ export async function sendOrderTrackingEmail(email: string, orderId: string, tra
         </div>
       `
     })
+
+    if (error) {
+      console.error("Resend API Error (Tracking):", error)
+    } else {
+      console.log("Tracking email sent:", data?.id)
+    }
   } catch (error) {
     console.error("Failed to send tracking email:", error)
   }
