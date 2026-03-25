@@ -16,14 +16,22 @@ export default function CartPage() {
     phone: ''
   })
 
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
   async function handleCheckout() {
+    setLoading(true)
+    setError(null)
+
     if (!email || !email.includes('@')) {
       alert('Please enter a valid email for delivery updates.')
+      setLoading(false)
       return
     }
 
     if (!shipping.name || !shipping.address || !shipping.city || !shipping.state || !shipping.zip) {
       alert('Please complete all shipping information fields.')
+      setLoading(false)
       return
     }
 
@@ -37,12 +45,20 @@ export default function CartPage() {
           shippingData: shipping
         }),
       })
+      
       const data = await res.json()
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Checkout failed. Please check your connection.')
+      }
+
       if (data.url) {
         window.location.href = data.url
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Checkout failed:', err)
+      setError(err.message || 'Something went wrong. Please try again.')
+      setLoading(false)
     }
   }
 
@@ -243,9 +259,16 @@ export default function CartPage() {
                   />
                 </div>
 
+                {error && (
+                  <div className="bg-red-50 border-2 border-red-500 p-4 text-xs font-black uppercase text-red-500 mb-4 animate-pulse">
+                    ⚠️ {error}
+                  </div>
+                )}
+
                 <button
                   onClick={handleCheckout}
                   disabled={
+                    loading ||
                     !email || 
                     !email.includes('@') || 
                     !shipping.name || 
@@ -255,9 +278,12 @@ export default function CartPage() {
                     !shipping.zip ||
                     items.length === 0
                   }
-                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
-                  {items.length === 0 ? 'Bag is Empty' : 'Proceed to Checkout'}
+                  {loading && (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  )}
+                  {items.length === 0 ? 'Bag is Empty' : loading ? 'Securing Checkout...' : 'Proceed to Checkout'}
                 </button>
 
                 <button
