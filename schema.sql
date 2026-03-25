@@ -15,6 +15,10 @@ CREATE TABLE orders (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   customer_email TEXT NOT NULL,
+  customer_name TEXT,
+  shipping_address TEXT,
+  phone_number TEXT,
+  tracking_number TEXT,
   stripe_session_id TEXT UNIQUE,
   total_amount DECIMAL(10, 2) NOT NULL,
   status TEXT DEFAULT 'pending' -- e.g., 'pending', 'paid', 'shipped'
