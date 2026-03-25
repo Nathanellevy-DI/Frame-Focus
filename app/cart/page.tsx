@@ -7,6 +7,14 @@ import Link from 'next/link'
 export default function CartPage() {
   const { items, removeItem, updateQty, totalPrice, clearCart } = useCart()
   const [email, setEmail] = useState('')
+  const [shipping, setShipping] = useState({
+    name: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    phone: ''
+  })
 
   async function handleCheckout() {
     if (!email || !email.includes('@')) {
@@ -14,11 +22,20 @@ export default function CartPage() {
       return
     }
 
+    if (!shipping.name || !shipping.address || !shipping.city || !shipping.state || !shipping.zip) {
+      alert('Please complete all shipping information fields.')
+      return
+    }
+
     try {
       const res = await fetch('/api/checkout-cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, email }),
+        body: JSON.stringify({ 
+          items, 
+          email,
+          shippingData: shipping
+        }),
       })
       const data = await res.json()
       if (data.url) {
@@ -140,8 +157,82 @@ export default function CartPage() {
                   <span className="text-3xl font-black tracking-tighter">${totalPrice.toFixed(2)}</span>
                 </div>
 
+                {/* Shipping Info Section */}
+                <div className="mt-12 space-y-6 pt-12 border-t-4 border-black">
+                  <h2 className="text-2xl font-black uppercase tracking-tighter">Shipping Information</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="E.g. Alexander Hamilton"
+                        value={shipping.name}
+                        onChange={(e) => setShipping({ ...shipping, name: e.target.value })}
+                        className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Street Address</label>
+                      <input
+                        type="text"
+                        placeholder="123 Gallery Row, Apt 4B"
+                        value={shipping.address}
+                        onChange={(e) => setShipping({ ...shipping, address: e.target.value })}
+                        className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">City</label>
+                      <input
+                        type="text"
+                        placeholder="New York"
+                        value={shipping.city}
+                        onChange={(e) => setShipping({ ...shipping, city: e.target.value })}
+                        className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">State/PR</label>
+                        <input
+                          type="text"
+                          placeholder="NY"
+                          value={shipping.state}
+                          onChange={(e) => setShipping({ ...shipping, state: e.target.value })}
+                          className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Zip Code</label>
+                        <input
+                          type="text"
+                          placeholder="10001"
+                          value={shipping.zip}
+                          onChange={(e) => setShipping({ ...shipping, zip: e.target.value })}
+                          className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-2 shadow-sm">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Phone Number (For Carrier Updates)</label>
+                      <input
+                        type="tel"
+                        placeholder="+1 (555) 000-0000"
+                        value={shipping.phone}
+                        onChange={(e) => setShipping({ ...shipping, phone: e.target.value })}
+                        className="w-full bg-gray-50 border-2 border-gray-100 p-4 font-bold outline-none focus:border-black transition-colors"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex flex-col gap-2 mt-8">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Email for Delivery Updates</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Email for Delivery Notifications</label>
                   <input
                     type="email"
                     required
@@ -154,7 +245,7 @@ export default function CartPage() {
 
                 <button
                   onClick={handleCheckout}
-                  disabled={!email || !email.includes('@') || items.length === 0}
+                  disabled={!email || !email.includes('@') || !shipping.name || !shipping.address || items.length === 0}
                   className="w-full bg-black text-white font-black uppercase tracking-widest py-5 hover:bg-gray-900 transition-colors text-sm mt-4 disabled:opacity-50"
                 >
                   Proceed to Checkout
