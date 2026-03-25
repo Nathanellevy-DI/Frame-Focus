@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
             <div className="border-t-2 border-b-2 border-black py-6 mb-8">
               <p className="text-4xl font-black tracking-tighter">
-                ${parseFloat(product.price).toFixed(2)}
+                ${parseFloat(String(product.price)).toFixed(2)}
               </p>
               <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">Free worldwide shipping</p>
             </div>

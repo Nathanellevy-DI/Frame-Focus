@@ -105,11 +105,11 @@ export default function CartPage() {
                   {/* Price */}
                   <div className="text-right shrink-0">
                     <p className="text-xl font-black tracking-tighter">
-                      ${(parseFloat(item.price) * item.qty).toFixed(2)}
+                      ${(parseFloat(String(item.price)) * item.qty).toFixed(2)}
                     </p>
                     {item.qty > 1 && (
                       <p className="text-xs text-gray-400 mt-1">
-                        ${parseFloat(item.price).toFixed(2)} each
+                        ${parseFloat(String(item.price)).toFixed(2)} each
                       </p>
                     )}
                   </div>

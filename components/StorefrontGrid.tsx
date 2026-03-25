@@ -3,12 +3,12 @@
 import Link from 'next/link'
 import { useCart } from './CartProvider'
 
-export default function StorefrontGrid({ products }) {
+export default function StorefrontGrid({ products }: { products: any[] }) {
   const { addItem } = useCart()
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
-      {products.map((product) => (
+      {products.map((product: any) => (
         <article key={product.id} className="group relative break-inside-avoid mb-12 border-b-2 border-black pb-8">
           <Link href={`/product/${product.id}`}>
             <div className="w-full aspect-[3/4] bg-gray-100 mb-8 overflow-hidden relative shadow-2xl cursor-pointer">
@@ -24,7 +24,7 @@ export default function StorefrontGrid({ products }) {
               <h2 className="text-2xl font-black uppercase tracking-tighter mb-2 hover:underline">{product.title}</h2>
               <p className="text-xs font-bold uppercase tracking-widest text-gray-400">{product.description || product.category || 'Print'}</p>
             </Link>
-            <p className="text-xl font-black shrink-0 tracking-tighter">${parseFloat(product.price).toFixed(2)}</p>
+            <p className="text-xl font-black shrink-0 tracking-tighter">${parseFloat(String(product.price)).toFixed(2)}</p>
           </div>
 
           <div className="flex gap-3 mt-8">

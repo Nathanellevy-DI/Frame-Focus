@@ -2,7 +2,7 @@
 
 import { useCart } from './CartProvider'
 
-export default function AddToCartButton({ product }) {
+export default function AddToCartButton({ product }: { product: any }) {
   const { addItem } = useCart()
 
   return (

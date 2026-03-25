@@ -1,22 +1,21 @@
-// components/AdminProductForm.jsx
 'use client'
 
 import { addProduct } from '@/app/actions'
-import { useRef, useState } from 'react'
+import { useRef, useState, ChangeEvent, DragEvent } from 'react'
 
 export default function AdminProductForm() {
-  const formRef = useRef(null)
-  const [preview, setPreview] = useState(null)
-  const [imageUrl, setImageUrl] = useState('')
-  const [uploading, setUploading] = useState(false)
-  const [dragActive, setDragActive] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [uploading, setUploading] = useState<boolean>(false)
+  const [dragActive, setDragActive] = useState<boolean>(false)
 
-  async function handleFile(file) {
+  async function handleFile(file: File | undefined | null) {
     if (!file || !file.type.startsWith('image/')) return
 
     // Show local preview immediately
     const reader = new FileReader()
-    reader.onload = (e) => setPreview(e.target.result)
+    reader.onload = (e) => setPreview((e.target?.result as string) || null)
     reader.readAsDataURL(file)
 
     // Upload to server
@@ -37,14 +36,16 @@ export default function AdminProductForm() {
     }
   }
 
-  function handleDrop(e) {
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setDragActive(false)
-    const file = e.dataTransfer.files[0]
-    handleFile(file)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0]
+      handleFile(file)
+    }
   }
 
-  function handleDrag(e) {
+  function handleDrag(e: DragEvent<HTMLDivElement>) {
     e.preventDefault()
     if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true)
@@ -97,7 +98,7 @@ export default function AdminProductForm() {
             onDragEnter={handleDrag}
             onDragOver={handleDrag}
             onDragLeave={handleDrag}
-            onClick={() => document.getElementById('file-input').click()}
+            onClick={() => document.getElementById('file-input')?.click()}
             className={`border-2 border-dashed cursor-pointer transition-all duration-300 min-h-[200px] flex items-center justify-center relative overflow-hidden ${
               dragActive 
                 ? 'border-white bg-white/10' 
@@ -109,7 +110,7 @@ export default function AdminProductForm() {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(e) => handleFile(e.target.files[0])}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleFile(e.target.files?.[0])}
             />
 
             {preview ? (

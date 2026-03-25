@@ -24,13 +24,13 @@ export async function POST(req: Request) {
       name: item.title,
       quantity: String(item.qty),
       basePriceMoney: {
-        amount: BigInt(Math.round(parseFloat(item.price) * 100)),
+        amount: BigInt(Math.round(parseFloat(String(item.price)) * 100)),
         currency: 'USD',
       },
     }))
 
     const totalAmount = items.reduce(
-      (sum: number, i: any) => sum + parseFloat(i.price) * i.qty, 0
+      (sum: number, i: any) => sum + parseFloat(String(i.price)) * i.qty, 0
     )
 
     // Create Square Checkout link
