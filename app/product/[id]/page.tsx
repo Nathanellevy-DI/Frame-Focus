@@ -51,7 +51,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             {/* Product Details */}
             <div className="flex flex-col justify-center">
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-400 mb-4">
-                {product.category || 'Fine Art Print'}
+                {product.category === 'Printful Auto-Sync' ? 'Fine Art Print' : (product.category || 'Fine Art Print')}
               </p>
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6">
                 {product.title}
