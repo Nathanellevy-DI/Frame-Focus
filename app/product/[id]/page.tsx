@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
-import AddToCartButton from '@/components/AddToCartButton'
+import ProductVariantSelector from '@/components/ProductVariantSelector'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -12,9 +12,14 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     const supabase = await createClient()
     const { data: product } = await supabase
       .from('products')
-      .select('*')
+      .select('*, product_variants(*)')
       .eq('id', id)
       .single()
+    
+    // Sort variants by price ascending if they exist
+    if (product?.product_variants) {
+      product.product_variants.sort((a: any, b: any) => parseFloat(a.price) - parseFloat(b.price))
+    }
 
     if (!product) return notFound()
 
@@ -58,29 +63,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 </p>
               )}
 
-              <div className="border-t-2 border-b-2 border-black py-6 mb-8">
-                <p className="text-4xl font-black tracking-tighter">
-                  ${parseFloat(String(product.price)).toFixed(2)}
-                </p>
-                <p className="text-xs uppercase tracking-widest text-gray-400 mt-1">Free worldwide shipping</p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  <span className="text-xs uppercase tracking-widest text-gray-500">
-                    {product.is_available ? 'In Stock — Ready to Ship' : 'Sold Out'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Add to Cart / Buy Now Buttons */}
-              <AddToCartButton product={{
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                image_url: product.image_url,
-              }} />
+              <ProductVariantSelector 
+                product={product} 
+                variants={product.product_variants || []} 
+              />
 
               <div className="mt-12 space-y-4 border-t border-gray-200 pt-8">
                 <div className="flex items-start gap-3">

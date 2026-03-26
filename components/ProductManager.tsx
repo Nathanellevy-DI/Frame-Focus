@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { deleteProduct, updateProduct, toggleProductAvailability } from '@/app/admin/product-actions'
+import VariantManager from './VariantManager'
 
 interface Product {
   id: string
@@ -11,6 +12,7 @@ interface Product {
   image_url: string
   is_available: boolean
   created_at: string
+  product_variants?: any[]
 }
 
 export default function ProductManager({ products }: { products: Product[] }) {
@@ -150,6 +152,15 @@ export default function ProductManager({ products }: { products: Product[] }) {
               </div>
             </div>
           )}
+          
+          {/* Variant Manager shows below the artwork details if not in edit mode */}
+          {editingId !== product.id && (
+            <VariantManager 
+              productId={product.id} 
+              variants={product.product_variants || []} 
+            />
+          )}
+
         </div>
       ))}
     </div>

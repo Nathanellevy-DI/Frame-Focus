@@ -8,6 +8,9 @@ export interface CartItem {
   price: string | number
   image_url: string
   qty: number
+  variant_id?: string
+  variant_name?: string
+  original_product_id?: string
 }
 
 interface CartContextType {

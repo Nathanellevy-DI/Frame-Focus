@@ -28,20 +28,15 @@ export default function StorefrontGrid({ products }: { products: any[] }) {
           </div>
 
           <div className="flex gap-3 mt-8">
-            <button
-              onClick={() => addItem({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                image_url: product.image_url,
-              })}
-              className="flex-1 bg-white text-black hover:bg-gray-100 border-2 border-black font-black uppercase tracking-widest py-4 transition-colors text-xs"
-            >
-              Add to Bag
-            </button>
             <Link
               href={`/product/${product.id}`}
-              className="flex-1 bg-black text-white hover:bg-gray-900 border-2 border-black font-black uppercase tracking-widest py-4 transition-colors text-xs text-center"
+              className="flex-1 bg-white text-black hover:bg-gray-100 border-2 border-black font-black uppercase tracking-widest py-4 transition-colors text-xs text-center flex items-center justify-center"
+            >
+              Select Size
+            </Link>
+            <Link
+              href={`/product/${product.id}`}
+              className="flex-1 bg-black text-white hover:bg-gray-900 border-2 border-black font-black uppercase tracking-widest py-4 transition-colors text-xs text-center flex items-center justify-center"
             >
               View Details
             </Link>

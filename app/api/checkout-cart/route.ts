@@ -86,7 +86,8 @@ export async function POST(req: Request) {
       // 2. Create the itemized records
       const itemRecords = items.map((item: any) => ({
         order_id: orderData.id,
-        product_id: item.id,
+        product_id: item.original_product_id || item.id,
+        variant_id: item.variant_id || null,
         quantity: item.qty,
         price_at_purchase: item.price
       }))
