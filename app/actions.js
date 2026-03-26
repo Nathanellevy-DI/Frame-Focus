@@ -20,8 +20,9 @@ export async function addProduct(formData) {
 
     if (error) throw error
 
-    // This clears the cache so the new product shows up on the shop page instantly
+    // This clears the cache so the new product shows up instantly
     revalidatePath('/')
+    revalidatePath('/admin')
     return { success: true }
   } catch (error) {
     console.error("Database Error:", error)

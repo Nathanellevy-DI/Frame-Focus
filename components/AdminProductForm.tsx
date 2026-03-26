@@ -25,12 +25,24 @@ export default function AdminProductForm() {
 
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      
+      if (!res.ok) {
+        if (res.status === 413) {
+          throw new Error('Image is too large. Vercel allows max 4.5MB uploads. Please compress your image first.')
+        }
+        throw new Error(`Upload failed with status ${res.status}`)
+      }
+
       const data = await res.json()
       if (data.url) {
         setImageUrl(data.url)
+      } else if (data.error) {
+        throw new Error(data.error)
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Upload failed:', err)
+      alert(err.message || 'Image upload failed. Please try a smaller file.')
+      setPreview(null)
     } finally {
       setUploading(false)
     }

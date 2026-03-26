@@ -11,7 +11,15 @@ export async function deleteProduct(productId: string) {
       .delete()
       .eq('id', productId)
     
-    if (error) throw error
+    if (error) {
+      if (error.code === '23503') {
+        return { 
+          success: false, 
+          error: "Cannot delete this product because it has already been ordered by customers. Please use the 'Hide' button instead to preserve your historical order records." 
+        }
+      }
+      throw error
+    }
     
     revalidatePath('/')
     revalidatePath('/admin')
