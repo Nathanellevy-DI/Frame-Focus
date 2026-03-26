@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { SquareClient, SquareEnvironment } from 'square'
 import crypto from 'crypto'
 import { createClient } from '@/utils/supabase/server'
+import { sendOrderReceivedEmail } from '@/lib/email-service'
 
 export async function POST(req: Request) {
   try {
@@ -82,12 +83,19 @@ export async function POST(req: Request) {
         .insert(itemRecords)
 
       if (itemsError) throw itemsError
+
+      // 3. Send instant "Order Received" email
+      if (email && email.includes('@')) {
+        console.log(`📧 Sending Order Received email to: ${email}`)
+        await sendOrderReceivedEmail(email, orderData.id, shippingData?.name || '')
+      }
     }
 
     return NextResponse.json({ url: paymentLink?.url })
   } catch (error: any) {
+    console.error('Checkout error:', error)
     return NextResponse.json({ 
-      error: error.message || 'Server error during checkout. Please check your environment variables.',
+      error: error.message || 'Server error during checkout.',
       details: error.response?.text || error.toString()
     }, { status: 500 })
   }
