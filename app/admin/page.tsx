@@ -1,16 +1,22 @@
 import AdminProductForm from '@/components/AdminProductForm'
+import ProductManager from '@/components/ProductManager'
 import { logoutAction } from '@/app/admin/auth-actions'
 import { createClient } from '@/utils/supabase/server'
 import OrderDeleteButton from '@/components/OrderDeleteButton'
 import OrderStatusSelect from '@/components/OrderStatusSelect'
 import OrderTrackingInput from '@/components/OrderTrackingInput'
-import { revalidatePath } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminPage() {
   const supabase = await createClient()
   
+  // Fetch all products (including hidden) for catalog management
+  const { data: products } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: false })
+
   const { data: orders } = await supabase
     .from('orders')
     .select(`
@@ -45,9 +51,14 @@ export default async function AdminPage() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          <section className="lg:col-span-4">
-            <h2 className="text-xl font-bold mb-6 uppercase tracking-widest border-l-4 border-white pl-4 text-white">Catalog Management</h2>
-            <AdminProductForm />
+          <section className="lg:col-span-4 space-y-12">
+            <div>
+              <h2 className="text-xl font-bold mb-6 uppercase tracking-widest border-l-4 border-white pl-4 text-white">Catalog Management</h2>
+              <AdminProductForm />
+            </div>
+
+            {/* Product Inventory — Edit / Delete / Hide  */}
+            <ProductManager products={JSON.parse(JSON.stringify(products || []))} />
           </section>
 
           <section className="lg:col-span-8">
