@@ -16,6 +16,15 @@ export default function CartPage() {
     phone: ''
   })
 
+  const SHIPPINGS = [
+    { id: 'Economy', name: 'Economy', price: 5.99, time: '8 business days' },
+    { id: 'Standard', name: 'Standard', price: 9.99, time: '6 business days' },
+    { id: 'Express', name: 'Express', price: 18.99, time: '3 business days' },
+    { id: 'Rush', name: 'Rush', price: 23.99, time: '2 business days' },
+  ]
+  const [shippingPlan, setShippingPlan] = useState('Standard')
+  const currentShippingCost = SHIPPINGS.find(s => s.id === shippingPlan)?.price || 9.99
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -42,7 +51,9 @@ export default function CartPage() {
         body: JSON.stringify({ 
           items, 
           email,
-          shippingData: shipping
+          shippingData: shipping,
+          shippingPlan,
+          shippingCost: currentShippingCost
         }),
       })
       
@@ -166,11 +177,11 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                   <span className="text-xs uppercase tracking-widest text-gray-500">Shipping</span>
-                  <span className="text-sm font-bold uppercase tracking-widest text-green-600">Complimentary</span>
+                  <span className="text-sm font-bold tracking-tighter">${currentShippingCost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center pt-2 pb-6 border-b-2 border-black">
                   <span className="text-sm font-black uppercase tracking-widest">Total</span>
-                  <span className="text-3xl font-black tracking-tighter">${totalPrice.toFixed(2)}</span>
+                  <span className="text-3xl font-black tracking-tighter">${(totalPrice + currentShippingCost).toFixed(2)}</span>
                 </div>
 
                 {/* Shipping Info Section */}
@@ -248,6 +259,35 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-8 text-black">
+                  
+                  {/* Shipping Speeds */}
+                  <div className="mb-6">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3 block">Choose a shipping method</label>
+                    <div className="space-y-3">
+                      {SHIPPINGS.map(plan => (
+                        <label 
+                          key={plan.id}
+                          className={`flex justify-between items-center p-4 border-2 cursor-pointer transition-colors ${shippingPlan === plan.id ? 'border-black bg-gray-50' : 'border-gray-100 hover:border-gray-300'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <input 
+                              type="radio" 
+                              name="shippingPlan" 
+                              value={plan.id}
+                              checked={shippingPlan === plan.id}
+                              onChange={(e) => setShippingPlan(e.target.value)}
+                              className="w-4 h-4 text-black accent-black"
+                            />
+                            <div>
+                              <span className="block font-bold text-sm tracking-tight">{plan.name}</span>
+                              <span className="block text-xs tracking-widest text-gray-400 mt-1 uppercase">{plan.time}</span>
+                            </div>
+                          </div>
+                          <span className="font-black text-sm">${plan.price.toFixed(2)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Email for Delivery Notifications</label>
                   <input
                     type="email"

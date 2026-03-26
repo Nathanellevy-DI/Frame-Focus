@@ -21,6 +21,7 @@ CREATE TABLE orders (
   tracking_number TEXT,
   stripe_session_id TEXT UNIQUE,
   total_amount DECIMAL(10, 2) NOT NULL,
+  shipping_speed TEXT DEFAULT 'Standard',
   status TEXT DEFAULT 'pending' -- e.g., 'pending', 'paid', 'shipped'
 );
 

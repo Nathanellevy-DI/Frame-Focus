@@ -107,7 +107,18 @@ export default async function AdminPage() {
                       {/* Shipping Details */}
                       {(order.customer_name || order.shipping_address || order.phone_number) && (
                         <div className="bg-gray-50 p-6 mb-4 border-l-4 border-black border border-gray-100">
-                          <p className="text-[10px] uppercase tracking-[0.2em] font-black mb-4 text-gray-400 bg-white inline-block px-2">Shipping Details</p>
+                          <div className="flex justify-between items-center mb-4">
+                            <p className="text-[10px] uppercase tracking-[0.2em] font-black text-gray-400 bg-white inline-block px-2">Shipping Details</p>
+                            {order.shipping_speed && (
+                              <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 ${
+                                order.shipping_speed === 'Rush' ? 'bg-red-500 text-white animate-pulse' :
+                                order.shipping_speed === 'Express' ? 'bg-orange-500 text-white' :
+                                'bg-black text-white'
+                              }`}>
+                                {order.shipping_speed} Speed
+                              </span>
+                            )}
+                          </div>
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-3 text-[11px] font-black uppercase tracking-tight">
                             {order.customer_name && <div><span className="text-gray-400 mr-2">NAME:</span> {order.customer_name}</div>}
                             {order.phone_number && <div><span className="text-gray-400 mr-2">PHONE:</span> {order.phone_number}</div>}

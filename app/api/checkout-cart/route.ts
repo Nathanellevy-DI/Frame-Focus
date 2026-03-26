@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       environment: SquareEnvironment.Production,
     })
 
-    const { items, email, shippingData } = await req.json()
+    const { items, email, shippingData, shippingPlan, shippingCost } = await req.json()
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 })
@@ -30,9 +30,21 @@ export async function POST(req: Request) {
       },
     }))
 
+    // Add shipping fee as a distinct line item on the Square receipt
+    if (shippingCost && shippingCost > 0) {
+      lineItems.push({
+        name: `Shipping: ${shippingPlan || 'Standard'}`,
+        quantity: '1',
+        basePriceMoney: {
+          amount: BigInt(Math.round(parseFloat(String(shippingCost)) * 100)),
+          currency: 'USD',
+        },
+      })
+    }
+
     const totalAmount = items.reduce(
       (sum: number, i: any) => sum + parseFloat(String(i.price)) * i.qty, 0
-    )
+    ) + (parseFloat(String(shippingCost)) || 0)
 
     // Create Square Checkout link
     const response = await client.checkout.paymentLinks.create({
@@ -63,6 +75,7 @@ export async function POST(req: Request) {
           phone_number: shippingData?.phone || null,
           stripe_session_id: paymentLink.id,
           total_amount: totalAmount,
+          shipping_speed: shippingPlan || 'Standard',
           status: 'pending'
         })
         .select()
