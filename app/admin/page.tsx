@@ -14,7 +14,7 @@ export default async function AdminPage() {
   // Fetch all products (including hidden) for catalog management
   const { data: products } = await supabase
     .from('products')
-    .select('*')
+    .select('*, product_variants(*)')
     .order('created_at', { ascending: false })
 
   const { data: orders } = await supabase
