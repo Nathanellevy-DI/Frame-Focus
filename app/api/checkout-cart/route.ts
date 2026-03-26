@@ -19,6 +19,7 @@ export async function POST(req: Request) {
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
     const idempotencyKey = crypto.randomUUID()
+    const ourOrderId = crypto.randomUUID() // Generate our DB ID upfront
 
     // Build Square order line items
     const lineItems = items.map((item: any) => ({
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
         lineItems,
       },
       checkoutOptions: {
-        redirectUrl: `${baseUrl}/success`,
+        redirectUrl: `${baseUrl}/success?order_id=${ourOrderId}`,
         askForShippingAddress: true,
       },
     })
@@ -69,6 +70,7 @@ export async function POST(req: Request) {
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
+          id: ourOrderId,
           customer_email: email || 'pending@checkout',
           customer_name: shippingData?.name || null,
           shipping_address: shippingData ? `${shippingData.address}, ${shippingData.city}, ${shippingData.state} ${shippingData.zip}` : null,

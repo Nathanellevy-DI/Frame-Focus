@@ -18,6 +18,23 @@ interface Product {
 export default function ProductManager({ products }: { products: Product[] }) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [syncing, setSyncing] = useState(false)
+
+  async function handleSyncPrintful() {
+    setSyncing(true)
+    try {
+      const res = await fetch('/api/printful/sync', { method: 'POST' })
+      const data = await res.json()
+      if (data.success) {
+        alert(data.message)
+        window.location.reload() // Refresh to see synced catalog
+      } else alert(`Sync Error: ${data.error}`)
+    } catch (err: any) {
+      alert(`Sync Failed: ${err.message}`)
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   async function handleDelete(productId: string) {
     if (!confirm('Are you sure you want to remove this product from the gallery?')) return
@@ -52,9 +69,23 @@ export default function ProductManager({ products }: { products: Product[] }) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold uppercase tracking-widest border-l-4 border-white pl-4 text-white mb-6">
-        Catalog Inventory ({products.length})
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold uppercase tracking-widest border-l-4 border-white pl-4 text-white">
+          Catalog Inventory ({products.length})
+        </h2>
+        <button
+          onClick={handleSyncPrintful}
+          disabled={syncing}
+          className="text-xs font-black uppercase tracking-widest bg-red-600 hover:bg-red-500 text-white px-4 py-2 transition-colors flex items-center gap-2 disabled:opacity-50"
+        >
+          {syncing ? (
+            <span className="animate-spin w-4 h-4 rounded-full border-t-2 border-white block"></span>
+          ) : (
+            '⚡ Auto-Sync from Printful'
+          )}
+        </button>
+      </div>
+
       {products.map((product) => (
         <div key={product.id} className="border border-gray-800 p-4 group hover:border-gray-600 transition-colors">
           {editingId === product.id ? (
