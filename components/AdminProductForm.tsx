@@ -2,6 +2,7 @@
 
 import { addProduct } from '@/app/actions'
 import { useRef, useState, ChangeEvent, DragEvent } from 'react'
+import imageCompression from 'browser-image-compression'
 
 export default function AdminProductForm() {
   const formRef = useRef<HTMLFormElement>(null)
@@ -20,10 +21,21 @@ export default function AdminProductForm() {
 
     // Upload to server
     setUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
 
     try {
+      // 1. Compress the image client-side to bypass Vercel's 4.5MB upload limit
+      const options = {
+        maxSizeMB: 4,
+        maxWidthOrHeight: 1600,
+        useWebWorker: true,
+        fileType: 'image/webp',
+      }
+      
+      const compressedFile = await imageCompression(file, options)
+
+      // 2. Send the compressed file to the API
+      const formData = new FormData()
+      formData.append('file', compressedFile, 'image.webp')
       const res = await fetch('/api/upload', { method: 'POST', body: formData })
       
       if (!res.ok) {
