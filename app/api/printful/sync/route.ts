@@ -90,7 +90,9 @@ export async function POST(req: Request) {
         // Harvest any unique mockup imagery attached to this specific size
         if (Array.isArray(v.files)) {
           v.files.forEach((f: any) => {
-            if (f.preview_url) allMockups.add(f.preview_url)
+            if (f.type === 'preview' && f.preview_url) {
+              allMockups.add(f.preview_url)
+            }
           })
         }
 

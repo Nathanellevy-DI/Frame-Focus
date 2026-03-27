@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { deleteProduct, updateProduct, toggleProductAvailability } from '@/app/admin/product-actions'
+import { deleteProduct, updateProduct, toggleProductAvailability, removeProductImage } from '@/app/admin/product-actions'
 import VariantManager from './VariantManager'
 
 interface Product {
@@ -23,6 +23,7 @@ interface Category {
 export default function ProductManager({ products, categories }: { products: Product[], categories: Category[] }) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [removingImage, setRemovingImage] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
 
   async function handleSyncPrintful() {
@@ -42,13 +43,24 @@ export default function ProductManager({ products, categories }: { products: Pro
   }
 
   async function handleDelete(productId: string) {
-    if (!confirm('Are you sure you want to remove this product from the gallery?')) return
+    if (!confirm('Are you sure you want to delete this specific artwork from your database?')) return
+    
     setDeleting(productId)
-    const result = await deleteProduct(productId)
-    if (!result.success) {
-      alert(`Failed to delete: ${result.error}`)
+    const res = await deleteProduct(productId)
+    if (!res.success) {
+      alert(`Error deleting product: ${res.error}`)
     }
     setDeleting(null)
+  }
+
+  async function handleRemoveImage(productId: string, imageUrl: string) {
+    if (!confirm('Are you certain you want to permanently delete this mockup image from the array?')) return
+    setRemovingImage(imageUrl)
+    const res = await removeProductImage(productId, imageUrl)
+    if (!res.success) {
+      alert(`Error: ${res.error}`)
+    }
+    setRemovingImage(null)
   }
 
   async function handleToggle(productId: string, currentState: boolean) {
@@ -127,6 +139,22 @@ export default function ProductManager({ products, categories }: { products: Pro
                 className="w-full bg-transparent border-b border-gray-600 text-white p-2 outline-none focus:border-white text-sm"
                 placeholder="Price"
               />
+              <div className="flex gap-2 max-w-[240px] overflow-x-auto no-scrollbar pb-2 mb-2">
+                {product.image_urls?.map((img, idx) => (
+                  <div key={idx} className="relative w-16 h-20 flex-shrink-0 border border-gray-600 group">
+                    <img src={img} alt={`Mockup ${idx + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(product.id, img)}
+                      disabled={removingImage === img}
+                      className="absolute top-0 right-0 bg-red-600 text-white w-5 h-5 flex items-center justify-center text-[10px] font-black opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                      title="Delete Mockup"
+                    >
+                      {removingImage === img ? '...' : 'X'}
+                    </button>
+                  </div>
+                ))}
+              </div>
               <input type="hidden" name="imageUrl" value="" />
               <div className="flex gap-2 pt-2">
                 <button

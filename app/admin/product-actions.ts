@@ -83,3 +83,36 @@ export async function toggleProductAvailability(productId: string, isAvailable: 
     return { success: false, error: error.message }
   }
 }
+
+export async function removeProductImage(productId: string, imageUrlToRemove: string) {
+  try {
+    const supabase = await createClient()
+    
+    // First fetch current arrays
+    const { data: product } = await supabase.from('products').select('image_urls').eq('id', productId).single()
+    if (!product) throw new Error("Product not found")
+
+    const currentImages = product.image_urls || []
+    const newImages = currentImages.filter((img: string) => img !== imageUrlToRemove)
+
+    // Ensure we don't delete the last image!
+    if (newImages.length === 0) {
+      throw new Error("Cannot delete the only image. Please upload a new image first before deleting this one.")
+    }
+
+    const { error } = await supabase
+      .from('products')
+      .update({ image_urls: newImages })
+      .eq('id', productId)
+
+    if (error) throw error
+
+    revalidatePath('/')
+    revalidatePath('/admin')
+    revalidatePath(`/product/${productId}`)
+    return { success: true }
+  } catch (error: any) {
+    console.error("Remove image error:", error)
+    return { success: false, error: error.message }
+  }
+}
