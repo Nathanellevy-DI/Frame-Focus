@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
+import ProductCarousel from '@/components/ProductCarousel'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -39,13 +40,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
         <div className="max-w-7xl mx-auto px-8 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-            {/* Product Image */}
-            <div className="aspect-[3/4] bg-gray-100 overflow-hidden shadow-2xl">
-              <img
-                src={product.image_url}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
+            {/* Product Image Carousel */}
+            <div className="w-full">
+              <ProductCarousel images={product.image_urls || []} altText={product.title} />
             </div>
 
             {/* Product Details */}

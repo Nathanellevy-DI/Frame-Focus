@@ -30,7 +30,7 @@ export default function ProductVariantSelector({ product, variants }: { product:
       variant_name: selectedVariant?.size_name,
       title: name,
       price: price,
-      image_url: product.image_url,
+      image_url: product.image_urls?.[0] || '',
     })
     setIsOpen(true)
   }

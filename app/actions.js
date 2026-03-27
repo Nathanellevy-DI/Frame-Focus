@@ -7,7 +7,8 @@ export async function addProduct(formData) {
   const title = formData.get('title')
   const description = formData.get('description')
   const price = parseFloat(formData.get('price'))
-  const imageUrl = formData.get('imageUrl')
+  const imageUrlsString = formData.get('imageUrls')
+  const image_urls = imageUrlsString ? imageUrlsString.split(',') : []
   const category_id = formData.get('category_id') || null
 
   try {
@@ -16,7 +17,7 @@ export async function addProduct(formData) {
       title,
       description,
       price,
-      image_url: imageUrl,
+      image_urls,
       category_id
     })
 

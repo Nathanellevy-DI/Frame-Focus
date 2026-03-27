@@ -21,7 +21,7 @@ export default function StorefrontGrid({ products, categories = [] }: { products
       <Link href={`/product/${product.id}`}>
         <div className="w-full aspect-[3/4] bg-gray-100 mb-8 overflow-hidden relative shadow-2xl cursor-pointer">
           <img
-            src={product.image_url}
+            src={product.image_urls?.[0] || ''}
             alt={product.title}
             className="w-full h-full object-cover grayscale contrast-[1.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
           />

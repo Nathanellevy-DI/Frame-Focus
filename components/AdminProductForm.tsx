@@ -11,55 +11,46 @@ interface Category {
 
 export default function AdminProductForm({ categories }: { categories: Category[] }) {
   const formRef = useRef<HTMLFormElement>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [imageUrl, setImageUrl] = useState<string>('')
+  const [previews, setPreviews] = useState<string[]>([])
+  const [imageUrls, setImageUrls] = useState<string[]>([])
   const [uploading, setUploading] = useState<boolean>(false)
   const [dragActive, setDragActive] = useState<boolean>(false)
 
-  async function handleFile(file: File | undefined | null) {
-    if (!file || !file.type.startsWith('image/')) return
-
-    // Show local preview immediately
-    const reader = new FileReader()
-    reader.onload = (e) => setPreview((e.target?.result as string) || null)
-    reader.readAsDataURL(file)
-
-    // Upload to server
-    setUploading(true)
-
-    try {
-      // 1. Compress the image client-side to bypass Vercel's 4.5MB upload limit
-      const options = {
-        maxSizeMB: 4,
-        maxWidthOrHeight: 1600,
-        useWebWorker: true,
-        fileType: 'image/webp',
-      }
-      
-      const compressedFile = await imageCompression(file, options)
-
-      // 2. Send the compressed file to the API
-      const formData = new FormData()
-      formData.append('file', compressedFile, 'image.webp')
-      const res = await fetch('/api/upload', { method: 'POST', body: formData })
-      
-      if (!res.ok) {
-        if (res.status === 413) {
-          throw new Error('Image is too large. Vercel allows max 4.5MB uploads. Please compress your image first.')
+  async function processFile(file: File) {
+    if (!file || !file.type.startsWith('image/')) return null
+    return new Promise<{preview: string, url: string}>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = async (e) => {
+        const previewResult = (e.target?.result as string) || ''
+        try {
+          const options = { maxSizeMB: 4, maxWidthOrHeight: 1600, useWebWorker: true, fileType: 'image/webp' }
+          const compressedFile = await imageCompression(file, options)
+          const formData = new FormData()
+          formData.append('file', compressedFile, 'image.webp')
+          const res = await fetch('/api/upload', { method: 'POST', body: formData })
+          if (!res.ok) throw new Error('Upload failed')
+          const data = await res.json()
+          if (data.url) resolve({ preview: previewResult, url: data.url })
+          else reject(data.error)
+        } catch (err) {
+          reject(err)
         }
-        throw new Error(`Upload failed with status ${res.status}`)
       }
+      reader.readAsDataURL(file)
+    })
+  }
 
-      const data = await res.json()
-      if (data.url) {
-        setImageUrl(data.url)
-      } else if (data.error) {
-        throw new Error(data.error)
-      }
-    } catch (err: any) {
-      console.error('Upload failed:', err)
-      alert(err.message || 'Image upload failed. Please try a smaller file.')
-      setPreview(null)
+  async function handleFiles(files: FileList | null | undefined) {
+    if (!files || files.length === 0) return
+    setUploading(true)
+    try {
+      const results = await Promise.all(Array.from(files).map(f => processFile(f)))
+      const valid = results.filter(Boolean) as {preview: string, url: string}[]
+      setPreviews(prev => [...prev, ...valid.map(v => v.preview)])
+      setImageUrls(prev => [...prev, ...valid.map(v => v.url)])
+    } catch (err) {
+      console.error(err)
+      alert("Error uploading images.")
     } finally {
       setUploading(false)
     }
@@ -68,19 +59,13 @@ export default function AdminProductForm({ categories }: { categories: Category[
   function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setDragActive(false)
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0]
-      handleFile(file)
-    }
+    handleFiles(e.dataTransfer.files)
   }
 
   function handleDrag(e: DragEvent<HTMLDivElement>) {
     e.preventDefault()
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true)
-    } else if (e.type === 'dragleave') {
-      setDragActive(false)
-    }
+    if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true)
+    else if (e.type === 'dragleave') setDragActive(false)
   }
 
   return (
@@ -92,18 +77,16 @@ export default function AdminProductForm({ categories }: { categories: Category[
       <form 
         ref={formRef}
         action={async (formData) => {
-          formData.set('imageUrl', imageUrl)
+          formData.set('imageUrls', imageUrls.join(','))
           const result = await addProduct(formData)
-          
           if (!result.success) {
             alert(`Error: ${result.error}`)
             return
           }
-          
           alert("Product added successfully!")
           formRef.current?.reset()
-          setPreview(null)
-          setImageUrl('')
+          setPreviews([])
+          setImageUrls([])
         }} 
         className="flex flex-col gap-6"
       >
@@ -140,61 +123,54 @@ export default function AdminProductForm({ categories }: { categories: Category[
           />
         </div>
 
-        {/* Image Upload Zone */}
+        {/* Multi-Image Upload Zone */}
         <div className="flex flex-col gap-2">
-          <label className="text-white text-xs uppercase tracking-widest">Artwork Image</label>
+          <label className="text-white text-xs uppercase tracking-widest">Artwork Images</label>
           <div
             onDrop={handleDrop}
             onDragEnter={handleDrag}
             onDragOver={handleDrag}
             onDragLeave={handleDrag}
             onClick={() => document.getElementById('file-input')?.click()}
-            className={`border-2 border-dashed cursor-pointer transition-all duration-300 min-h-[200px] flex items-center justify-center relative overflow-hidden ${
-              dragActive 
-                ? 'border-white bg-white/10' 
-                : 'border-gray-600 hover:border-gray-400'
+            className={`border-2 border-dashed cursor-pointer transition-all duration-300 min-h-[140px] flex items-center justify-center relative overflow-hidden ${
+              dragActive ? 'border-white bg-white/10' : 'border-gray-600 hover:border-gray-400'
             }`}
           >
             <input
               id="file-input"
               type="file"
               accept="image/*"
+              multiple
               className="hidden"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleFile(e.target.files?.[0])}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleFiles(e.target.files)}
             />
 
-            {preview ? (
-              <div className="relative w-full">
-                <img src={preview} alt="Preview" className="w-full h-auto object-contain max-h-[300px]" />
-                {uploading && (
-                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <div className="text-white text-xs uppercase tracking-widest animate-pulse">
-                      Optimizing...
-                    </div>
+            {previews.length > 0 ? (
+              <div className="p-4 grid grid-cols-3 gap-2 w-full">
+                {previews.map((preview, i) => (
+                  <div key={i} className="relative aspect-[3/4] bg-gray-900 border border-gray-700">
+                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                   </div>
-                )}
-                {!uploading && imageUrl && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/80 text-center py-2">
-                    <span className="text-green-400 text-xs uppercase tracking-widest">✓ Ready</span>
+                ))}
+                {uploading && (
+                  <div className="aspect-[3/4] border-2 border-dashed border-gray-600 flex items-center justify-center bg-black/50">
+                    <span className="text-white text-[9px] uppercase tracking-widest animate-pulse">Wait...</span>
                   </div>
                 )}
               </div>
             ) : (
               <div className="text-center p-8">
                 <div className="text-gray-500 text-3xl mb-3">↑</div>
-                <p className="text-gray-400 text-xs uppercase tracking-widest">
-                  Drop image here or click to browse
+                <p className="text-gray-400 text-[10px] uppercase tracking-widest">
+                  Drop multiple images here
                 </p>
-                <p className="text-gray-600 text-xs mt-2">
-                  Any format · Any size · Auto-optimized
-                </p>
+                {uploading && <p className="text-green-400 text-[10px] mt-2 animate-pulse uppercase tracking-widest">Uploading...</p>}
               </div>
             )}
           </div>
         </div>
 
-        {/* Hidden field for the uploaded URL */}
-        <input type="hidden" name="imageUrl" value={imageUrl} />
+        <input type="hidden" name="imageUrls" value={imageUrls.join(',')} />
 
         <div className="flex flex-col gap-2">
           <label className="text-white text-xs uppercase tracking-widest">Price ($)</label>
@@ -210,14 +186,14 @@ export default function AdminProductForm({ categories }: { categories: Category[
 
         <button 
           type="submit" 
-          disabled={!imageUrl || uploading}
+          disabled={imageUrls.length === 0 || uploading}
           className={`font-bold py-4 mt-4 transition-all uppercase text-sm tracking-widest ${
-            !imageUrl || uploading
+            imageUrls.length === 0 || uploading
               ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
               : 'bg-white text-black hover:bg-gray-200'
           }`}
         >
-          {uploading ? 'Processing Image...' : 'Publish to Gallery'}
+          {uploading ? 'Processing Images...' : 'Publish to Gallery'}
         </button>
       </form>
     </div>

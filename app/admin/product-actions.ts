@@ -43,9 +43,10 @@ export async function updateProduct(productId: string, formData: FormData) {
     const updateData: any = { title, description, price }
     if (category_id) updateData.category_id = category_id
     
-    // Only update image if a new one was provided
+    // Only update images if new ones were explicitly provided
+    const imageUrl = formData.get('imageUrl') as string
     if (imageUrl && imageUrl.length > 0) {
-      updateData.image_url = imageUrl
+      updateData.image_urls = imageUrl.split(',')
     }
 
     const { error } = await supabase

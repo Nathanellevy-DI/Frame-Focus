@@ -7,11 +7,10 @@ import VariantManager from './VariantManager'
 interface Product {
   id: string
   title: string
-  description: string | null
-  price: number
-  image_url: string
+  description?: string
+  price: number | string
+  image_urls: string[]
   is_available: boolean
-  created_at: string
   product_variants?: any[]
   category_id?: string
 }
@@ -148,12 +147,16 @@ export default function ProductManager({ products, categories }: { products: Pro
           ) : (
             // View Mode
             <div className="flex gap-4 items-start">
-              <div className="w-16 h-20 bg-gray-900 flex-shrink-0 overflow-hidden border border-gray-800">
-                <img
-                  src={product.image_url}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
-                />
+              <div className="flex gap-2 max-w-[240px] overflow-x-auto no-scrollbar pb-2">
+                {product.image_urls?.map((img, idx) => (
+                  <div key={idx} className="w-16 h-20 bg-gray-900 flex-shrink-0 overflow-hidden border border-gray-800">
+                    <img
+                      src={img}
+                      alt={`${product.title} ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">

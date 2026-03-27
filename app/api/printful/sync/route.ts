@@ -51,7 +51,7 @@ export async function POST(req: Request) {
           .from('products')
           .insert({
             title: pfProd.name,
-            image_url: pfProd.thumbnail_url,
+            image_urls: [pfProd.thumbnail_url],
             price: 50.00, // Temp placeholder
             category_id: uncategorizedId
           })
@@ -80,10 +80,20 @@ export async function POST(req: Request) {
       await supabase.from('product_variants').delete().eq('product_id', dbProductId)
 
       let lowestPrice = 99999
+      const allMockups = new Set<string>()
+      allMockups.add(pfProd.thumbnail_url)
 
       const variantInserts = syncVariants.map((v: any) => {
         const floatPrice = parseFloat(v.retail_price) || 0
         if (floatPrice < lowestPrice && floatPrice > 0) lowestPrice = floatPrice
+        
+        // Harvest any unique mockup imagery attached to this specific size
+        if (Array.isArray(v.files)) {
+          v.files.forEach((f: any) => {
+            if (f.preview_url) allMockups.add(f.preview_url)
+          })
+        }
+
         return {
           product_id: dbProductId,
           size_name: v.name.replace(`${pfProd.name} - `, '').replace(`${pfProd.name} / `, ''),
@@ -95,8 +105,11 @@ export async function POST(req: Request) {
       if (variantInserts.length > 0) {
         await supabase.from('product_variants').insert(variantInserts)
 
-        // Update main artwork "Starting at" price to lowest size price
-        await supabase.from('products').update({ price: lowestPrice }).eq('id', dbProductId)
+        // Update main artwork "Starting at" price to lowest size price, and attach the massive compiled image array
+        await supabase.from('products').update({ 
+          price: lowestPrice,
+          image_urls: Array.from(allMockups)
+        }).eq('id', dbProductId)
       }
     }
 
