@@ -14,9 +14,14 @@ export default function ContactPage() {
           <Link href="/" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors">
             ← Back to Gallery
           </Link>
-          <Link href="/" className="text-xl font-black uppercase tracking-tighter">
-            Frame &amp; Focus
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/track" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors">
+              Track Order
+            </Link>
+            <Link href="/" className="text-xl font-black uppercase tracking-tighter">
+              Frame &amp; Focus
+            </Link>
+          </div>
         </div>
       </div>
 

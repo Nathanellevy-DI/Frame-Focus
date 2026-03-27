@@ -32,9 +32,14 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             <Link href="/" className="text-sm font-black uppercase tracking-widest hover:underline">
               ← Back to Gallery
             </Link>
-            <Link href="/" className="text-2xl font-black uppercase tracking-tighter">
-              Frame &amp; Focus
-            </Link>
+            <div className="flex items-center gap-6">
+              <Link href="/track" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
+                Track Order
+              </Link>
+              <Link href="/" className="text-2xl font-black uppercase tracking-tighter">
+                Frame &amp; Focus
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -34,3 +34,19 @@
  GET /admin 200 in 144ms (next.js: 49ms, proxy.ts: 21ms, application-code: 74ms)
  GET /admin 200 in 45ms (next.js: 953µs, proxy.ts: 3ms, application-code: 42ms)
  GET /admin 200 in 29ms (next.js: 946µs, proxy.ts: 2ms, application-code: 26ms)
+ GET /admin 200 in 1909ms (next.js: 3ms, proxy.ts: 4ms, application-code: 1902ms)
+ GET /admin 200 in 1418ms (next.js: 3ms, proxy.ts: 4ms, application-code: 1411ms)
+ POST /api/printful/sync 200 in 5.5s (next.js: 46ms, application-code: 5.4s)
+ GET /admin 200 in 1292ms (next.js: 1496µs, proxy.ts: 2ms, application-code: 1289ms)
+ GET /admin 200 in 1782ms (next.js: 4ms, proxy.ts: 4ms, application-code: 1774ms)
+ POST /api/printful/sync 200 in 5.6s (next.js: 3ms, application-code: 5.6s)
+ GET /admin 200 in 1384ms (next.js: 1067µs, proxy.ts: 2ms, application-code: 1381ms)
+✓ Compiled in 24ms
+ GET / 200 in 1504ms (next.js: 32ms, application-code: 1472ms)
+ GET /track 200 in 451ms (next.js: 437ms, application-code: 13ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 1143ms (next.js: 421ms, application-code: 721ms)
+ POST /track 303 in 1158ms (next.js: 5ms, application-code: 1153ms)
+  └─ ƒ <inline action>({}) in 0ms app/track/page.tsx
+✓ Compiled in 29ms
+ GET /admin 200 in 48ms (next.js: 18ms, proxy.ts: 1610µs, application-code: 29ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 632ms (next.js: 4ms, application-code: 628ms)
