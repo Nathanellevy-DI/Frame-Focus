@@ -22,7 +22,9 @@ export default function StorefrontGrid({ products }: { products: any[] }) {
           <div className="flex justify-between items-start">
             <Link href={`/product/${product.id}`} className="pr-4">
               <h2 className="text-2xl font-black uppercase tracking-tighter mb-2 hover:underline">{product.title}</h2>
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-400">{product.description || product.category || 'Print'}</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                {product.description || (product.category === 'Printful Auto-Sync' ? 'Fine Art Print' : product.category) || 'Print'}
+              </p>
             </Link>
             <p className="text-xl font-black shrink-0 tracking-tighter">${parseFloat(String(product.price)).toFixed(2)}</p>
           </div>
