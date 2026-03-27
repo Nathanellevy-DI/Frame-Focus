@@ -50,3 +50,16 @@
 ✓ Compiled in 29ms
  GET /admin 200 in 48ms (next.js: 18ms, proxy.ts: 1610µs, application-code: 29ms)
  GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 632ms (next.js: 4ms, application-code: 628ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 404 in 530ms (next.js: 6ms, application-code: 524ms)
+✓ Compiled in 68ms
+ GET /admin 200 in 247ms (next.js: 75ms, proxy.ts: 31ms, application-code: 141ms)
+ GET /admin 200 in 85ms (next.js: 3ms, proxy.ts: 4ms, application-code: 78ms)
+ GET /admin 200 in 45ms (next.js: 1688µs, proxy.ts: 3ms, application-code: 41ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 1056ms (next.js: 114ms, application-code: 942ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 881ms (next.js: 14ms, application-code: 867ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 920ms (next.js: 16ms, application-code: 904ms)
+ GET /track 200 in 84ms (next.js: 25ms, application-code: 59ms)
+ GET /track?email=nathanellevydi%40gmail.com 200 in 794ms (next.js: 1435µs, application-code: 792ms)
+ POST /track 303 in 806ms (next.js: 2ms, application-code: 803ms)
+  └─ ƒ <inline action>({}) in 0ms app/track/page.tsx
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 523ms (next.js: 5ms, application-code: 518ms)
