@@ -36,8 +36,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <Link href="/track" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">
                 Track Order
               </Link>
-              <Link href="/" className="text-2xl font-black uppercase tracking-tighter">
-                Frame &amp; Focus
+              <Link href="/" className="flex items-center gap-3">
+                <img src="/logo.png" alt="Frame & Focus Logo" className="w-8 h-8 mix-blend-multiply" />
+                <span className="text-2xl font-black uppercase tracking-tighter">
+                  Frame &amp; Focus
+                </span>
               </Link>
             </div>
           </div>

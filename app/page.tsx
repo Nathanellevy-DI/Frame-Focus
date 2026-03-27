@@ -29,11 +29,14 @@ export default async function ShopPage() {
   return (
     <main className="min-h-screen bg-white text-black p-8 md:p-16 selection:bg-black selection:text-white">
       <header className="mb-20 border-b-8 border-black pb-8 flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div>
-          <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter">
-            Frame &amp; Focus
-          </h1>
-          <p className="text-xl md:text-2xl font-bold uppercase tracking-widest mt-4">Prints</p>
+        <div className="flex items-center gap-6 md:gap-8">
+          <img src="/logo.png" alt="Frame & Focus Brand Logo" className="w-20 h-20 md:w-28 md:h-28 mix-blend-multiply" />
+          <div>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter">
+              Frame &amp; Focus
+            </h1>
+            <p className="text-xl md:text-2xl font-bold uppercase tracking-widest mt-2 md:mt-4">Prints</p>
+          </div>
         </div>
         <nav className="flex items-center gap-4">
           <Link 

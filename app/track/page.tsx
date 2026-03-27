@@ -56,8 +56,11 @@ export default async function GlobalTrackPage({ searchParams }: { searchParams: 
           <Link href="/" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors">
             ← Back to Gallery
           </Link>
-          <Link href="/" className="text-xl font-black uppercase tracking-tighter">
-            Frame &amp; Focus
+          <Link href="/" className="flex items-center gap-3">
+            <img src="/logo.png" alt="Frame & Focus Logo" className="w-8 h-8 mix-blend-multiply" />
+            <span className="text-xl md:text-2xl font-black uppercase tracking-tighter">
+              Frame &amp; Focus
+            </span>
           </Link>
         </div>
       </div>
@@ -134,7 +137,7 @@ export default async function GlobalTrackPage({ searchParams }: { searchParams: 
           <form action={searchOrder} className="flex flex-col gap-6">
             <input 
               name="orderId" 
-              placeholder="e.g. nate@example.com or ORD-CC8188B0" 
+              placeholder="e.g. customer@example.com or ORD-1A2B3C4D" 
               className={`w-full border-b-4 ${error === 'notfound' ? 'border-red-500' : 'border-black'} text-xl py-4 outline-none font-mono text-center focus:border-gray-500 transition-colors placeholder:text-gray-200`}
               required
               autoComplete="off"
