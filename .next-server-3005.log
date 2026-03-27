@@ -259,3 +259,25 @@
  GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 37ms (next.js: 9ms, application-code: 28ms)
  GET /admin 200 in 66ms (next.js: 19ms, proxy.ts: 3ms, application-code: 45ms)
  GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 293ms (next.js: 2ms, application-code: 291ms)
+Error inserting product: {
+  code: '23502',
+  details: 'Failing row contains (b9618fe2-b23d-4fc2-b1eb-3f246d222a04, 2026-03-27 15:51:53.069041+00, New York City Grand Central Station PostCard, null, 50.00, null, Print, t, 211ffddc-aaea-49d5-973b-9cd4512f742a, {NULL}).',
+  hint: null,
+  message: 'null value in column "image_url" of relation "products" violates not-null constraint'
+}
+ POST /api/printful/sync 200 in 6.5s (next.js: 49ms, application-code: 6.4s)
+ GET /admin 200 in 1463ms (next.js: 3ms, proxy.ts: 6ms, application-code: 1454ms)
+Error inserting product: {
+  code: '23502',
+  details: 'Failing row contains (14feef65-7710-41d3-9c94-e081d6b6cb31, 2026-03-27 16:00:11.948766+00, New York City Grand Central Station PostCard, null, 50.00, null, Print, t, 211ffddc-aaea-49d5-973b-9cd4512f742a, {https://files.cdn.printful.com/files/0bf/0bf2ef97412a6785dc8981...).',
+  hint: null,
+  message: 'null value in column "image_url" of relation "products" violates not-null constraint'
+}
+Error inserting product: {
+  code: '23502',
+  details: 'Failing row contains (ac069eb8-d722-4b23-b4b9-deac3b9a53ac, 2026-03-27 16:00:12.50523+00, The Vessel Jigsaw Puzzle, null, 50.00, null, Print, t, 211ffddc-aaea-49d5-973b-9cd4512f742a, {https://files.cdn.printful.com/files/bec/bec98a8264932838456268...).',
+  hint: null,
+  message: 'null value in column "image_url" of relation "products" violates not-null constraint'
+}
+ POST /api/printful/sync 200 in 5.8s (next.js: 1517µs, application-code: 5.8s)
+ POST /api/printful/sync 200 in 7.8s (next.js: 37ms, application-code: 7.8s)

@@ -52,6 +52,7 @@ export async function POST(req: Request) {
           .insert({
             title: pfProd.name,
             image_urls: [pfProd.thumbnail_url],
+            image_url: pfProd.thumbnail_url, // Legacy fallback to satisfy DB NOT NULL constraint
             price: 50.00, // Temp placeholder
             category_id: uncategorizedId
           })
