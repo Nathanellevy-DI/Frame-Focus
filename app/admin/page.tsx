@@ -1,5 +1,6 @@
 import AdminProductForm from '@/components/AdminProductForm'
 import ProductManager from '@/components/ProductManager'
+import CategoryManager from '@/components/CategoryManager'
 import { logoutAction } from '@/app/admin/auth-actions'
 import { createClient } from '@/utils/supabase/server'
 import OrderDeleteButton from '@/components/OrderDeleteButton'
@@ -16,6 +17,11 @@ export default async function AdminPage() {
     .from('products')
     .select('*, product_variants(*)')
     .order('created_at', { ascending: false })
+
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .order('name')
 
   const { data: orders } = await supabase
     .from('orders')
@@ -53,12 +59,19 @@ export default async function AdminPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <section className="lg:col-span-4 space-y-12">
             <div>
-              <h2 className="text-xl font-bold mb-6 uppercase tracking-widest border-l-4 border-white pl-4 text-white">Catalog Management</h2>
-              <AdminProductForm />
+              <CategoryManager categories={categories || []} />
+            </div>
+            
+            <div>
+              <h2 className="text-xl font-bold mb-6 uppercase tracking-widest border-l-4 border-white pl-4 text-white">Add New Product</h2>
+              <AdminProductForm categories={categories || []} />
             </div>
 
             {/* Product Inventory — Edit / Delete / Hide  */}
-            <ProductManager products={JSON.parse(JSON.stringify(products || []))} />
+            <ProductManager 
+              products={JSON.parse(JSON.stringify(products || []))} 
+              categories={categories || []} 
+            />
           </section>
 
           <section className="lg:col-span-8">

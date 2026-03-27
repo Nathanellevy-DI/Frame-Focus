@@ -29,6 +29,9 @@ export async function POST(req: Request) {
     const prodsData = await prodsRes.json()
     const printfulProducts = prodsData.result || []
 
+    const { data: uncat } = await supabase.from('categories').select('id').eq('name', 'Uncategorized').maybeSingle()
+    const uncategorizedId = uncat?.id || null
+
     let importedCount = 0
 
     // 3. Loop through and Sync each Product
@@ -50,7 +53,7 @@ export async function POST(req: Request) {
             title: pfProd.name,
             image_url: pfProd.thumbnail_url,
             price: 50.00, // Temp placeholder
-            category: 'Printful Auto-Sync'
+            category_id: uncategorizedId
           })
           .select('id')
           .single()

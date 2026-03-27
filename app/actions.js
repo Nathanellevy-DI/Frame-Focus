@@ -8,6 +8,7 @@ export async function addProduct(formData) {
   const description = formData.get('description')
   const price = parseFloat(formData.get('price'))
   const imageUrl = formData.get('imageUrl')
+  const category_id = formData.get('category_id') || null
 
   try {
     const supabase = await createClient()
@@ -15,7 +16,8 @@ export async function addProduct(formData) {
       title,
       description,
       price,
-      image_url: imageUrl
+      image_url: imageUrl,
+      category_id
     })
 
     if (error) throw error

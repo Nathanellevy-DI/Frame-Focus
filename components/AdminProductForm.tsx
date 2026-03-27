@@ -4,7 +4,12 @@ import { addProduct } from '@/app/actions'
 import { useRef, useState, ChangeEvent, DragEvent } from 'react'
 import imageCompression from 'browser-image-compression'
 
-export default function AdminProductForm() {
+interface Category {
+  id: string
+  name: string
+}
+
+export default function AdminProductForm({ categories }: { categories: Category[] }) {
   const formRef = useRef<HTMLFormElement>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [imageUrl, setImageUrl] = useState<string>('')
@@ -110,6 +115,20 @@ export default function AdminProductForm() {
             placeholder="E.g. Midnight in Tel Aviv"
             required 
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-white text-xs uppercase tracking-widest">Category Bucket</label>
+          <select 
+            name="category_id" 
+            defaultValue=""
+            className="bg-black border-b border-white text-white p-2 outline-none focus:border-gray-500 transition-colors uppercase tracking-widest text-sm"
+          >
+            <option value="" disabled>Select a Bucket</option>
+            {categories?.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
         </div>
 
         <div className="flex flex-col gap-2">

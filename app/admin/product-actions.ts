@@ -35,11 +35,13 @@ export async function updateProduct(productId: string, formData: FormData) {
   const description = formData.get('description') as string
   const price = parseFloat(formData.get('price') as string)
   const imageUrl = formData.get('imageUrl') as string
+  const category_id = formData.get('category_id') as string
 
   try {
     const supabase = await createClient()
     
     const updateData: any = { title, description, price }
+    if (category_id) updateData.category_id = category_id
     
     // Only update image if a new one was provided
     if (imageUrl && imageUrl.length > 0) {

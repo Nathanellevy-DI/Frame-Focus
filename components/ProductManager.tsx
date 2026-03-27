@@ -13,9 +13,15 @@ interface Product {
   is_available: boolean
   created_at: string
   product_variants?: any[]
+  category_id?: string
 }
 
-export default function ProductManager({ products }: { products: Product[] }) {
+interface Category {
+  id: string
+  name: string
+}
+
+export default function ProductManager({ products, categories }: { products: Product[], categories: Category[] }) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
@@ -104,12 +110,16 @@ export default function ProductManager({ products }: { products: Product[] }) {
                 className="w-full bg-transparent border-b border-gray-600 text-white p-2 outline-none focus:border-white text-sm font-bold"
                 placeholder="Title"
               />
-              <input
-                name="description"
-                defaultValue={product.description || ''}
-                className="w-full bg-transparent border-b border-gray-600 text-white p-2 outline-none focus:border-white text-sm"
-                placeholder="Description"
-              />
+              <select
+                name="category_id"
+                defaultValue={product.category_id || ''}
+                className="w-full bg-black border-b border-gray-600 text-white p-2 outline-none focus:border-white text-sm uppercase tracking-widest font-bold"
+              >
+                <option value="" disabled>Select Category</option>
+                {categories.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
               <input
                 name="price"
                 type="number"
