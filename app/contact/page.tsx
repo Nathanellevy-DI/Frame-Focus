@@ -41,7 +41,7 @@ export default function ContactPage() {
             <p className="text-sm text-gray-500 leading-loose mb-8">
               Spotted a photograph on our Instagram that isn't in the store? Or perhaps you need a massive 40x60" showpiece for a corporate lobby? Tell us your vision and we will make it a reality.
             </p>
-            <a href="mailto:nathanellevydi@gmail.com?subject=Custom Print Inquiry" className="inline-block bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 hover:bg-gray-800 transition-colors w-full text-center">
+            <a href="mailto:Framesfocusprints@mail.ru?subject=Custom Print Inquiry" className="inline-block bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 hover:bg-gray-800 transition-colors w-full text-center">
               Request Custom Quote
             </a>
           </div>
@@ -53,7 +53,7 @@ export default function ContactPage() {
             <p className="text-sm text-gray-500 leading-loose mb-8">
               Having trouble tracking your package? Need to update your shipping address before the warehouse dispatches your print? Our fulfillment team is available to assist you.
             </p>
-            <a href="mailto:nathanellevydi@gmail.com?subject=Order Support Request" className="inline-block border-2 border-black text-black text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 hover:bg-black hover:text-white transition-colors w-full text-center">
+            <a href="mailto:Framesfocusprints@mail.ru?subject=Order Support Request" className="inline-block border-2 border-black text-black text-[10px] font-black uppercase tracking-[0.2em] px-8 py-4 hover:bg-black hover:text-white transition-colors w-full text-center">
               Contact Support Team
             </a>
           </div>
@@ -63,8 +63,8 @@ export default function ContactPage() {
         {/* Direct Email Fallback */}
         <div className="mt-20 text-center border-t border-gray-200 pt-16">
           <p className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Direct Communication Line</p>
-          <a href="mailto:nathanellevydi@gmail.com" className="text-2xl font-bold tracking-tight hover:underline decoration-2 underline-offset-8">
-            nathanellevydi@gmail.com
+          <a href="mailto:Framesfocusprints@mail.ru" className="text-2xl font-bold tracking-tight hover:underline decoration-2 underline-offset-8">
+            Framesfocusprints@mail.ru
           </a>
         </div>
 
