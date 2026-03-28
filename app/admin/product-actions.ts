@@ -51,11 +51,15 @@ export async function updateProduct(productId: string, formData: FormData) {
   try {
     const supabase = await createClient()
     
+    // 1. Fetch current price to calculate differential margin
+    const { data: oldProduct } = await supabase.from('products').select('price').eq('id', productId).single()
+    const oldPrice = parseFloat(String(oldProduct?.price || 0))
+    const priceDiff = price - oldPrice
+
     const updateData: any = { title, description, price }
     if (category_id) updateData.category_id = category_id
     
     // Only update images if new ones were explicitly provided
-    const imageUrl = formData.get('imageUrl') as string
     if (imageUrl && imageUrl.length > 0) {
       updateData.image_urls = imageUrl.split(',')
     }
@@ -66,6 +70,17 @@ export async function updateProduct(productId: string, formData: FormData) {
       .eq('id', productId)
 
     if (error) throw error
+
+    // 2. If the user explicitly changed the mathematical price, propagate the margin difference to all child variations!
+    if (priceDiff !== 0) {
+      const { data: variants } = await supabase.from('product_variants').select('id, price').eq('product_id', productId)
+      if (variants && variants.length > 0) {
+        for (const v of variants) {
+          const newVariantPrice = parseFloat(String(v.price)) + priceDiff
+          await supabase.from('product_variants').update({ price: newVariantPrice }).eq('id', v.id)
+        }
+      }
+    }
 
     revalidatePath('/')
     revalidatePath('/admin')

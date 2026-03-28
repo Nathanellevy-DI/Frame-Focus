@@ -44,6 +44,7 @@ export async function POST(req: Request) {
         .maybeSingle()
 
       let dbProductId = existingProd?.id
+      const isNewProduct = !dbProductId
 
       if (!dbProductId) {
         // Create Product
@@ -108,11 +109,14 @@ export async function POST(req: Request) {
       if (variantInserts.length > 0) {
         await supabase.from('product_variants').insert(variantInserts)
 
-        // Update main artwork "Starting at" price to lowest size price, and attach the massive compiled image array
-        await supabase.from('products').update({ 
-          price: lowestPrice,
-          image_urls: Array.from(allMockups)
-        }).eq('id', dbProductId)
+        // Only enforce base Printful Prices and Stock Images on the INITIAL import.
+        // If the product already exists, we strictly preserve the Admin's manual price overrides and custom image injections!
+        if (isNewProduct) {
+          await supabase.from('products').update({ 
+            price: lowestPrice,
+            image_urls: Array.from(allMockups)
+          }).eq('id', dbProductId)
+        }
       }
     }
 
