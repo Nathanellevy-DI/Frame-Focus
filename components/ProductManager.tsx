@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { deleteProduct, updateProduct, toggleProductAvailability, removeProductImage } from '@/app/admin/product-actions'
+import { deleteProduct, updateProduct, toggleProductAvailability, removeProductImage, addProductImage } from '@/app/admin/product-actions'
 import VariantManager from './VariantManager'
+import imageCompression from 'browser-image-compression'
 
 interface Product {
   id: string
@@ -23,8 +24,41 @@ interface Category {
 export default function ProductManager({ products, categories }: { products: Product[], categories: Category[] }) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [removingImage, setRemovingImage] = useState<string | null>(null)
+  const [confirmRemoveImage, setConfirmRemoveImage] = useState<string | null>(null)
+  const [uploadingImageFor, setUploadingImageFor] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
+
+  async function handleAddImage(productId: string, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingImageFor(productId)
+    try {
+      const options = { maxSizeMB: 4, maxWidthOrHeight: 1600, useWebWorker: true, fileType: 'image/webp' }
+      const compressedFile = await imageCompression(file, options)
+      
+      const formData = new FormData()
+      formData.append('file', compressedFile, 'image.webp')
+      
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      if (!res.ok) throw new Error('Upload failed')
+      
+      const data = await res.json()
+      if (data.url) {
+        const actionRes = await addProductImage(productId, data.url)
+        if (!actionRes.success) alert('Error appending image: ' + actionRes.error)
+      } else {
+        alert(data.error)
+      }
+    } catch (err: any) {
+      alert("Error adding image: " + err.message)
+    } finally {
+      setUploadingImageFor(null)
+      e.target.value = ''
+    }
+  }
 
   async function handleSyncPrintful() {
     setSyncing(true)
@@ -42,25 +76,24 @@ export default function ProductManager({ products, categories }: { products: Pro
     }
   }
 
-  async function handleDelete(productId: string) {
-    if (!confirm('Are you sure you want to delete this specific artwork from your database?')) return
-    
+  async function executeDelete(productId: string) {
     setDeleting(productId)
     const res = await deleteProduct(productId)
     if (!res.success) {
       alert(`Error deleting product: ${res.error}`)
     }
     setDeleting(null)
+    setConfirmDeleteId(null)
   }
 
-  async function handleRemoveImage(productId: string, imageUrl: string) {
-    if (!confirm('Are you certain you want to permanently delete this mockup image from the array?')) return
+  async function executeRemoveImage(productId: string, imageUrl: string) {
     setRemovingImage(imageUrl)
     const res = await removeProductImage(productId, imageUrl)
     if (!res.success) {
-      alert(`Error: ${res.error}`)
+      alert(`Error removing image: ${res.error}`)
     }
     setRemovingImage(null)
+    setConfirmRemoveImage(null)
   }
 
   async function handleToggle(productId: string, currentState: boolean) {
@@ -139,21 +172,41 @@ export default function ProductManager({ products, categories }: { products: Pro
                 className="w-full bg-transparent border-b border-gray-600 text-white p-2 outline-none focus:border-white text-sm"
                 placeholder="Price"
               />
-              <div className="flex gap-2 max-w-[240px] overflow-x-auto no-scrollbar pb-2 mb-2">
+              <div className="flex gap-2 max-w-[240px] overflow-x-auto no-scrollbar pb-2 mb-2 items-center">
                 {product.image_urls?.map((img, idx) => (
                   <div key={idx} className="relative w-16 h-20 flex-shrink-0 border border-gray-600 group">
                     <img src={img} alt={`Mockup ${idx + 1}`} className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(product.id, img)}
-                      disabled={removingImage === img}
-                      className="absolute top-0 right-0 bg-red-600 text-white w-5 h-5 flex items-center justify-center text-[10px] font-black opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
-                      title="Delete Mockup"
-                    >
-                      {removingImage === img ? '...' : 'X'}
-                    </button>
+                    {confirmRemoveImage === img ? (
+                      <div className="absolute inset-0 bg-red-900/90 flex flex-col items-center justify-center gap-2">
+                        <button type="button" onClick={() => executeRemoveImage(product.id, img)} className="text-[10px] font-black text-white hover:text-red-200">YES</button>
+                        <button type="button" onClick={() => setConfirmRemoveImage(null)} className="text-[10px] font-black text-gray-300 hover:text-white">NO</button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmRemoveImage(img)}
+                        disabled={removingImage === img}
+                        className="absolute top-0 right-0 bg-red-600 text-white w-5 h-5 flex items-center justify-center text-[10px] font-black opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                        title="Delete Mockup"
+                      >
+                        {removingImage === img ? '...' : 'X'}
+                      </button>
+                    )}
                   </div>
                 ))}
+                
+                {/* Add Image Button */}
+                <label className="w-16 h-20 bg-gray-900 border border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors flex-shrink-0 relative group">
+                  {uploadingImageFor === product.id ? (
+                    <span className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></span>
+                  ) : (
+                    <>
+                      <span className="text-xl font-bold text-gray-400 group-hover:text-white">+</span>
+                      <span className="text-[8px] font-bold uppercase tracking-widest text-gray-500 group-hover:text-white mt-1">Add</span>
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleAddImage(product.id, e)} disabled={uploadingImageFor === product.id} />
+                </label>
               </div>
               <input type="hidden" name="imageUrl" value="" />
               <div className="flex gap-2 pt-2">
@@ -213,13 +266,21 @@ export default function ProductManager({ products, categories }: { products: Pro
                   >
                     {product.is_available ? 'Hide' : 'Show'}
                   </button>
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    disabled={deleting === product.id}
-                    className="text-[10px] uppercase tracking-widest text-gray-500 hover:text-red-400 transition-colors font-bold disabled:opacity-50"
-                  >
-                    {deleting === product.id ? 'Removing...' : 'Delete'}
-                  </button>
+                  {confirmDeleteId === product.id ? (
+                    <div className="flex items-center gap-2 bg-red-900 text-white px-2 py-0.5 ml-2">
+                      <span className="text-[9px] uppercase font-black tracking-widest">Sure?</span>
+                      <button onClick={() => executeDelete(product.id)} className="text-[9px] font-bold hover:text-red-200 uppercase">Yes</button>
+                      <button onClick={() => setConfirmDeleteId(null)} className="text-[9px] font-bold hover:text-gray-300 uppercase">No</button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmDeleteId(product.id)}
+                      disabled={deleting === product.id}
+                      className="text-[10px] uppercase tracking-widest text-gray-500 hover:text-red-400 transition-colors font-bold disabled:opacity-50"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

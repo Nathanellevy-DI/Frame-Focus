@@ -281,3 +281,222 @@ Error inserting product: {
 }
  POST /api/printful/sync 200 in 5.8s (next.js: 1517µs, application-code: 5.8s)
  POST /api/printful/sync 200 in 7.8s (next.js: 37ms, application-code: 7.8s)
+  Reload env: .env.local
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 163ms (next.js: 70ms, application-code: 93ms)
+ GET /admin 200 in 196ms (next.js: 140ms, proxy.ts: 25ms, application-code: 31ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 1372ms (next.js: 89ms, application-code: 1283ms)
+✓ Compiled in 42ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 175ms (next.js: 76ms, application-code: 100ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 43ms (next.js: 12ms, application-code: 32ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 12ms (next.js: 808µs, application-code: 12ms)
+ GET /admin 200 in 212ms (next.js: 40ms, proxy.ts: 76ms, application-code: 97ms)
+ GET /admin 200 in 110ms (next.js: 15ms, proxy.ts: 14ms, application-code: 82ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 15ms (next.js: 1955µs, application-code: 13ms)
+ GET /admin 200 in 67ms (next.js: 1267µs, proxy.ts: 1691µs, application-code: 64ms)
+ GET /admin 200 in 24ms (next.js: 971µs, proxy.ts: 1483µs, application-code: 22ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 466ms (next.js: 34ms, application-code: 432ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 676ms (next.js: 1291µs, application-code: 674ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 807ms (next.js: 2ms, application-code: 804ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 713ms (next.js: 3ms, application-code: 710ms)
+✓ Compiled in 45ms
+✓ Compiled in 153ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 148ms (next.js: 29ms, application-code: 119ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 34ms (next.js: 1404µs, application-code: 33ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 23ms (next.js: 9ms, application-code: 14ms)
+ GET /admin 200 in 200ms (next.js: 85ms, proxy.ts: 23ms, application-code: 92ms)
+ GET /admin 200 in 64ms (next.js: 13ms, proxy.ts: 1559µs, application-code: 49ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 19ms (next.js: 1971µs, application-code: 17ms)
+ GET /admin 200 in 89ms (next.js: 1727µs, proxy.ts: 1462µs, application-code: 85ms)
+ GET /admin 200 in 50ms (next.js: 1128µs, proxy.ts: 1387µs, application-code: 47ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 13ms (next.js: 834µs, application-code: 12ms)
+ GET /admin 200 in 22ms (next.js: 1015µs, proxy.ts: 1360µs, application-code: 19ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 647ms (next.js: 42ms, application-code: 604ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 519ms (next.js: 47ms, application-code: 472ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 413ms (next.js: 884µs, application-code: 412ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 406ms (next.js: 13ms, application-code: 393ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 675ms (next.js: 801µs, application-code: 675ms)
+✓ Compiled in 59ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 155ms (next.js: 41ms, application-code: 114ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 41ms (next.js: 1230µs, application-code: 40ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 22ms (next.js: 681µs, application-code: 22ms)
+ GET /admin 200 in 205ms (next.js: 100ms, proxy.ts: 22ms, application-code: 83ms)
+ GET /admin 200 in 70ms (next.js: 28ms, proxy.ts: 1489µs, application-code: 41ms)
+ GET /admin 200 in 21ms (next.js: 1304µs, proxy.ts: 1670µs, application-code: 18ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 442ms (next.js: 53ms, application-code: 389ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 330ms (next.js: 15ms, application-code: 316ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 293ms (next.js: 3ms, application-code: 291ms)
+✓ Compiled in 40ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 157ms (next.js: 92ms, application-code: 64ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 36ms (next.js: 14ms, application-code: 22ms)
+ GET /admin 200 in 208ms (next.js: 50ms, proxy.ts: 22ms, application-code: 136ms)
+ GET /admin 200 in 68ms (next.js: 8ms, proxy.ts: 2ms, application-code: 57ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 13ms (next.js: 840µs, application-code: 12ms)
+ GET /admin 200 in 32ms (next.js: 1136µs, proxy.ts: 1228µs, application-code: 30ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 368ms (next.js: 85ms, application-code: 283ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 254ms (next.js: 967µs, application-code: 253ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 223ms (next.js: 798µs, application-code: 222ms)
+✓ Compiled in 32ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 133ms (next.js: 73ms, application-code: 60ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 33ms (next.js: 11ms, application-code: 22ms)
+ GET /admin 200 in 209ms (next.js: 72ms, proxy.ts: 19ms, application-code: 118ms)
+ GET /admin 200 in 97ms (next.js: 10ms, proxy.ts: 1681µs, application-code: 85ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 13ms (next.js: 1123µs, application-code: 12ms)
+ GET /admin 200 in 52ms (next.js: 1538µs, proxy.ts: 1930µs, application-code: 48ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 618ms (next.js: 1057µs, application-code: 617ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 573ms (next.js: 985µs, application-code: 572ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 711ms (next.js: 30ms, application-code: 681ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 79ms (next.js: 25ms, application-code: 55ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 36ms (next.js: 886µs, application-code: 35ms)
+ GET /admin 200 in 214ms (next.js: 50ms, proxy.ts: 19ms, application-code: 145ms)
+ GET /admin 200 in 82ms (next.js: 1605µs, proxy.ts: 5ms, application-code: 75ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 17ms (next.js: 1236µs, application-code: 16ms)
+ GET /admin 200 in 50ms (next.js: 1129µs, proxy.ts: 1436µs, application-code: 48ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 558ms (next.js: 87ms, application-code: 472ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 427ms (next.js: 929µs, application-code: 426ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 379ms (next.js: 726µs, application-code: 378ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 17ms
+ GET /admin 200 in 2.1s (next.js: 2ms, proxy.ts: 1572µs, application-code: 2.1s)
+ GET / 200 in 1681ms (next.js: 14ms, application-code: 1667ms)
+ GET /admin 200 in 1708ms (next.js: 3ms, proxy.ts: 2ms, application-code: 1703ms)
+ GET /admin 200 in 1746ms (next.js: 3ms, proxy.ts: 4ms, application-code: 1739ms)
+ POST /admin 200 in 1882ms (next.js: 3ms, proxy.ts: 6ms, application-code: 1873ms)
+  └─ ƒ toggleProductAvailability("1d264878-710a-45c6-a9f5-49c5fe701e7f", false) in 284ms app/admin/product-actions.ts
+ POST /api/upload 200 in 1761ms (next.js: 96ms, application-code: 1665ms)
+ POST /admin 200 in 1978ms (next.js: 3ms, proxy.ts: 3ms, application-code: 1972ms)
+  └─ ƒ addProductImage("1d264878-710a-45c6-a9f5-49c5fe701e7f", "https://czdhymqvepshaysyyoed.supabase.co/storage/v1/object/public/product-images/bfb9674a-ff4a-4613-9e6b-cb9b2d2298e3.webp") in 472ms app/admin/product-actions.ts
+ POST /api/upload 200 in 855ms (next.js: 3ms, application-code: 852ms)
+ POST /admin 200 in 1963ms (next.js: 3ms, proxy.ts: 5ms, application-code: 1956ms)
+  └─ ƒ addProductImage("1d264878-710a-45c6-a9f5-49c5fe701e7f", "https://czdhymqvepshaysyyoed.supabase.co/storage/v1/object/public/product-images/45fb7d8d-b338-4c64-bb02-d471ba9bbe40.webp") in 479ms app/admin/product-actions.ts
+ POST /api/upload 200 in 691ms (next.js: 3ms, application-code: 689ms)
+ POST /admin 200 in 2.2s (next.js: 4ms, proxy.ts: 4ms, application-code: 2.2s)
+  └─ ƒ addProductImage("1d264878-710a-45c6-a9f5-49c5fe701e7f", "https://czdhymqvepshaysyyoed.supabase.co/storage/v1/object/public/product-images/d86eeae7-63f3-42c2-8c52-f8d819116207.webp") in 514ms app/admin/product-actions.ts
+ POST /admin 200 in 1839ms (next.js: 5ms, proxy.ts: 4ms, application-code: 1831ms)
+  └─ ƒ updateProduct("1d264878-710a-45c6-a9f5-49c5fe701e7f", {}) in 277ms app/admin/product-actions.ts
+ POST /admin 200 in 1882ms (next.js: 3ms, proxy.ts: 4ms, application-code: 1874ms)
+  └─ ƒ updateProduct("1d264878-710a-45c6-a9f5-49c5fe701e7f", {}) in 269ms app/admin/product-actions.ts
+ POST /admin 200 in 2.9s (next.js: 4ms, proxy.ts: 3ms, application-code: 2.9s)
+  └─ ƒ renameCategory("d889f46f-1122-4f44-9bce-990332969cba", "PostCard") in 931ms app/admin/category-actions.ts
+ GET / 200 in 1347ms (next.js: 2ms, application-code: 1345ms)
+ GET /product/084d6c38-a3e2-416d-9928-6cbd2d428f1b 200 in 557ms (next.js: 269ms, application-code: 288ms)
+ GET /product/9623b153-c41b-4db7-88a6-56fc584c50e2 200 in 636ms (next.js: 1767µs, application-code: 634ms)
+ GET /cart 200 in 30ms (next.js: 20ms, application-code: 10ms)
+📧 Sending Order Received email to: nathanellevi8@gmail.com
+❌ Resend Error (Order Received): {"statusCode":403,"name":"validation_error","message":"You can only send testing emails to your own email address (nathanellevydi@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain."}
+ POST /api/checkout-cart 200 in 2.1s (next.js: 221ms, application-code: 1867ms)
+✓ Compiled in 21ms
+✓ Compiled in 108ms
+[browser] ./components/CategoryManager.tsx:116:18
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  114 |                     )}
+  115 |                   </div>
+> 116 |                 )}
+      |                  ^
+  117 |               </div>
+  118 |             )}
+  119 |           </div>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/CategoryManager.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/CategoryManager.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component] 
+    at handleErrors (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./components/CategoryManager.tsx:116:18
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  114 |                     )}
+  115 |                   </div>
+> 116 |                 )}
+      |                  ^
+  117 |               </div>
+  118 |             )}
+  119 |           </div>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/CategoryManager.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/CategoryManager.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component] 
+    at handleErrors (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./components/CategoryManager.tsx:116:18
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  114 |                     )}
+  115 |                   </div>
+> 116 |                 )}
+      |                  ^
+  117 |               </div>
+  118 |             )}
+  119 |           </div>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/CategoryManager.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/CategoryManager.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component] 
+    at handleErrors (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./components/CategoryManager.tsx:116:18
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  114 |                     )}
+  115 |                   </div>
+> 116 |                 )}
+      |                  ^
+  117 |               </div>
+  118 |             )}
+  119 |           </div>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/CategoryManager.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Client Component Browser]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/CategoryManager.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Client Component SSR]
+    ./components/AdminTabs.tsx [Server Component]
+    ./app/admin/page.tsx [Server Component] 
+    at handleErrors (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/nathanellevy/Desktop/Custom Prints Websitw /.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+✓ Compiled in 15ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 77ms (next.js: 22ms, application-code: 55ms)
+ GET /admin 200 in 87ms (next.js: 39ms, proxy.ts: 3ms, application-code: 45ms)
+ GET /admin 200 in 30ms (next.js: 1476µs, proxy.ts: 3ms, application-code: 25ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 534ms (next.js: 7ms, application-code: 527ms)
+✓ Compiled in 33ms

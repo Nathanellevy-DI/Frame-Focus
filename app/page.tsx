@@ -38,20 +38,6 @@ export default async function ShopPage() {
             <p className="text-xl md:text-2xl font-bold uppercase tracking-widest mt-2 md:mt-4">Prints</p>
           </div>
         </div>
-        <nav className="flex items-center gap-4">
-          <Link 
-            href="/track" 
-            className="text-xs font-black uppercase tracking-widest bg-white text-black border-2 border-black px-6 py-4 hover:bg-gray-50 transition-colors shadow-xl shadow-black/5"
-          >
-            Track Order
-          </Link>
-          <Link 
-            href="/contact" 
-            className="text-xs font-black uppercase tracking-widest bg-black text-white border-2 border-black px-6 py-4 hover:bg-gray-800 transition-colors shadow-xl"
-          >
-            Custom Inquiries & Contact
-          </Link>
-        </nav>
       </header>
       
       {products.length === 0 ? (

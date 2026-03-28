@@ -56,31 +56,49 @@ export default function StorefrontGrid({ products, categories = [] }: { products
 
   return (
     <div>
-      {/* Category Navigation Bar */}
-      <div className="flex gap-4 mb-16 overflow-x-auto pb-4 scrollbar-hide">
-        <button 
-          onClick={() => setActiveCategory('ALL')}
-          className={`px-8 py-3 text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 shadow-sm ${
-            activeCategory === 'ALL' 
-              ? 'bg-black text-white scale-105' 
-              : 'bg-white text-gray-500 border border-black hover:text-black hover:bg-gray-100'
-          }`}
-        >
-          All Prints
-        </button>
-        {displayCategories.map(cat => (
+      {/* Category Navigation Bar & Utility Links */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-16 border-b border-black/10 pb-4">
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide">
           <button 
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => setActiveCategory('ALL')}
             className={`px-8 py-3 text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 shadow-sm ${
-              activeCategory === cat.id 
+              activeCategory === 'ALL' 
                 ? 'bg-black text-white scale-105' 
                 : 'bg-white text-gray-500 border border-black hover:text-black hover:bg-gray-100'
             }`}
           >
-            {cat.name}
+            All Prints
           </button>
-        ))}
+          {displayCategories.map(cat => (
+            <button 
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-8 py-3 text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 shadow-sm ${
+                activeCategory === cat.id 
+                  ? 'bg-black text-white scale-105' 
+                  : 'bg-white text-gray-500 border border-black hover:text-black hover:bg-gray-100'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Aligned Utility Links */}
+        <nav className="flex items-center gap-4 shrink-0">
+          <Link 
+            href="/track" 
+            className="text-xs font-black uppercase tracking-widest bg-white text-black border-2 border-black px-6 py-3 hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            Track Order
+          </Link>
+          <Link 
+            href="/contact" 
+            className="text-xs font-black uppercase tracking-widest bg-black text-white border-2 border-black px-6 py-3 hover:bg-gray-800 transition-colors shadow-sm"
+          >
+            Contact Us
+          </Link>
+        </nav>
       </div>
 
       {/* New Arrivals Section */}

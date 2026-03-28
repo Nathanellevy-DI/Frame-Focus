@@ -65,21 +65,51 @@ export async function updateProduct(productId: string, formData: FormData) {
   }
 }
 
-export async function toggleProductAvailability(productId: string, isAvailable: boolean) {
+export async function toggleProductAvailability(productId: string, currentStatus: boolean) {
   try {
     const supabase = await createClient()
     const { error } = await supabase
       .from('products')
-      .update({ is_available: isAvailable })
+      .update({ is_available: !currentStatus })
       .eq('id', productId)
-
+      
     if (error) throw error
-
-    revalidatePath('/')
     revalidatePath('/admin')
+    revalidatePath('/')
     return { success: true }
   } catch (error: any) {
     console.error("Toggle availability error:", error)
+    return { success: false, error: error.message }
+  }
+}
+
+export async function addProductImage(productId: string, imageUrl: string) {
+  try {
+    const supabase = await createClient()
+
+    const { data: product, error: fetchError } = await supabase
+      .from('products')
+      .select('image_urls')
+      .eq('id', productId)
+      .single()
+
+    if (fetchError) throw fetchError
+
+    const currentUrls = Array.isArray(product.image_urls) ? product.image_urls : []
+    const updatedUrls = [...currentUrls, imageUrl]
+
+    const { error: updateError } = await supabase
+      .from('products')
+      .update({ image_urls: updatedUrls })
+      .eq('id', productId)
+
+    if (updateError) throw updateError
+
+    revalidatePath('/admin')
+    revalidatePath('/')
+    return { success: true }
+  } catch (error: any) {
+    console.error("Add image error:", error)
     return { success: false, error: error.message }
   }
 }

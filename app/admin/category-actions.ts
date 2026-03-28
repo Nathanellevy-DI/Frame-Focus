@@ -37,3 +37,21 @@ export async function deleteCategory(id: string) {
     return { success: false, error: err.message }
   }
 }
+
+export async function renameCategory(id: string, newName: string) {
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase
+      .from('categories')
+      .update({ name: newName })
+      .eq('id', id)
+      
+    if (error) throw error
+    revalidatePath('/admin')
+    revalidatePath('/')
+    return { success: true }
+  } catch (err: any) {
+    console.error('Failed to rename category:', err)
+    return { success: false, error: err.message }
+  }
+}
