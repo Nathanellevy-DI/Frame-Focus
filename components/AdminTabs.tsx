@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { publishAllChanges } from '@/app/admin/publish-actions'
 import AdminProductForm from '@/components/AdminProductForm'
 import ProductManager from '@/components/ProductManager'
 import CategoryManager from '@/components/CategoryManager'
@@ -10,40 +11,68 @@ import OrderTrackingInput from '@/components/OrderTrackingInput'
 
 export default function AdminTabs({ products, categories, orders }: { products: any[], categories: any[], orders: any[] }) {
   const [activeTab, setActiveTab] = useState<'manage' | 'add' | 'orders'>('manage')
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [justPublished, setJustPublished] = useState(false)
+
+  async function handlePublish() {
+    setIsPublishing(true)
+    await publishAllChanges()
+    setIsPublishing(false)
+    setJustPublished(true)
+    setTimeout(() => setJustPublished(false), 3000)
+  }
 
   return (
     <div className="w-full">
-      {/* Tab Navigation */}
-      <div className="flex flex-wrap gap-4 mb-12 border-b border-gray-800 pb-4">
+      {/* Tab Navigation & Publish Container */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-gray-800 pb-4 gap-6">
+        <div className="flex flex-wrap gap-4">
+          <button 
+            onClick={() => setActiveTab('manage')}
+            className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
+              activeTab === 'manage' 
+                ? 'bg-white text-black scale-105 shadow-xl' 
+                : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
+            }`}
+          >
+            Manage Existing Items
+          </button>
+          <button 
+            onClick={() => setActiveTab('add')}
+            className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
+              activeTab === 'add' 
+                ? 'bg-white text-black scale-105 shadow-xl' 
+                : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
+            }`}
+          >
+            Add New Items & Categories
+          </button>
+          <button 
+            onClick={() => setActiveTab('orders')}
+            className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
+              activeTab === 'orders' 
+                ? 'bg-white text-black scale-105 shadow-xl' 
+                : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
+            }`}
+          >
+            Orders Dashboard
+          </button>
+        </div>
+
         <button 
-          onClick={() => setActiveTab('manage')}
-          className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
-            activeTab === 'manage' 
-              ? 'bg-white text-black scale-105 shadow-xl' 
-              : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
-          }`}
+          onClick={handlePublish}
+          disabled={isPublishing}
+          className={`px-8 py-3 text-xs font-black uppercase tracking-widest transition-all ${
+            justPublished ? 'bg-green-500 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]'
+          } disabled:opacity-50 flex items-center gap-3`}
         >
-          Manage Existing Items
-        </button>
-        <button 
-          onClick={() => setActiveTab('add')}
-          className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
-            activeTab === 'add' 
-              ? 'bg-white text-black scale-105 shadow-xl' 
-              : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
-          }`}
-        >
-          Add New Items & Categories
-        </button>
-        <button 
-          onClick={() => setActiveTab('orders')}
-          className={`px-6 py-3 text-xs font-black uppercase tracking-widest transition-all ${
-            activeTab === 'orders' 
-              ? 'bg-white text-black scale-105 shadow-xl' 
-              : 'bg-black text-gray-400 border border-gray-800 hover:text-white hover:border-white'
-          }`}
-        >
-          Orders Dashboard
+          {isPublishing ? (
+            <><span className="w-4 h-4 border-2 border-white/50 rounded-full border-t-white animate-spin"></span> Publishing...</>
+          ) : justPublished ? (
+            <>✔ Everything is Live!</>
+          ) : (
+            <>Save & Publish to Live Site</>
+          )}
         </button>
       </div>
 

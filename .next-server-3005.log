@@ -500,3 +500,28 @@ Import traces:
  GET /admin 200 in 30ms (next.js: 1476µs, proxy.ts: 3ms, application-code: 25ms)
  GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 534ms (next.js: 7ms, application-code: 527ms)
 ✓ Compiled in 33ms
+ GET /admin 200 in 1710ms (next.js: 4ms, proxy.ts: 1581µs, application-code: 1705ms)
+🔄 Updating Order Status: eb943fb9-3bc2-4975-b795-08b04281d172 -> paid
+📧 Customer Email from DB: nathanellevi8@gmail.com
+🚀 Triggering Email to: nathanellevi8@gmail.com
+❌ Resend Error (Status): {"statusCode":403,"name":"validation_error","message":"You can only send testing emails to your own email address (nathanellevydi@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain."}
+ POST /admin 200 in 2.7s (next.js: 4ms, proxy.ts: 3ms, application-code: 2.7s)
+  └─ ƒ updateOrderStatus("eb943fb9-3bc2-4975-b795-08b04281d172", "paid") in 1115ms app/admin/order-actions.ts
+✓ Compiled in 149ms
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 310ms (next.js: 121ms, application-code: 189ms)
+ GET /admin/login 200 in 194ms (next.js: 31ms, proxy.ts: 67ms, application-code: 96ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 77ms (next.js: 19ms, application-code: 58ms)
+ GET /admin/login 200 in 111ms (next.js: 3ms, proxy.ts: 26ms, application-code: 82ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 146ms (next.js: 22ms, application-code: 124ms)
+ GET /admin/login 200 in 154ms (next.js: 41ms, proxy.ts: 25ms, application-code: 89ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 67ms (next.js: 2ms, application-code: 64ms)
+ GET /admin/login 200 in 70ms (next.js: 7ms, proxy.ts: 46ms, application-code: 18ms)
+ GET /track/ecd37f66-8a74-4d05-87da-d15f1eefc965 200 in 18ms (next.js: 1585µs, application-code: 16ms)
+ GET /admin/login 200 in 17ms (next.js: 1196µs, proxy.ts: 1980µs, application-code: 13ms)
+ GET /admin/login 200 in 68ms (next.js: 1100µs, proxy.ts: 1263µs, application-code: 66ms)
+ GET /admin/login 200 in 24ms (next.js: 1435µs, proxy.ts: 1750µs, application-code: 21ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 944ms (next.js: 94ms, application-code: 850ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 736ms (next.js: 4ms, application-code: 732ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 739ms (next.js: 4ms, application-code: 735ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 752ms (next.js: 2ms, application-code: 750ms)
+ GET /track/cc8188b0-675f-4f7f-a244-18cd0d3852a3 200 in 667ms (next.js: 1842µs, application-code: 665ms)
