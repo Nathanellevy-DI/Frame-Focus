@@ -28,6 +28,7 @@ export default function ProductManager({ products, categories }: { products: Pro
   const [removingImage, setRemovingImage] = useState<string | null>(null)
   const [confirmRemoveImage, setConfirmRemoveImage] = useState<string | null>(null)
   const [uploadingImageFor, setUploadingImageFor] = useState<string | null>(null)
+  const [toggling, setToggling] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
 
   async function handleAddImage(productId: string, e: React.ChangeEvent<HTMLInputElement>) {
@@ -97,7 +98,10 @@ export default function ProductManager({ products, categories }: { products: Pro
   }
 
   async function handleToggle(productId: string, currentState: boolean) {
-    await toggleProductAvailability(productId, !currentState)
+    setToggling(productId)
+    const res = await toggleProductAvailability(productId, currentState)
+    if (!res.success) alert(`Error toggling availability: ${res.error}`)
+    setToggling(null)
   }
 
   async function handleSaveEdit(productId: string, formData: FormData) {
@@ -262,9 +266,10 @@ export default function ProductManager({ products, categories }: { products: Pro
                   </button>
                   <button
                     onClick={() => handleToggle(product.id, product.is_available)}
-                    className="text-[10px] uppercase tracking-widest text-gray-500 hover:text-yellow-400 transition-colors font-bold"
+                    disabled={toggling === product.id}
+                    className="text-[10px] uppercase tracking-widest text-gray-500 hover:text-yellow-400 transition-colors font-bold disabled:opacity-50"
                   >
-                    {product.is_available ? 'Hide' : 'Show'}
+                    {toggling === product.id ? '...' : product.is_available ? 'Hide' : 'Show'}
                   </button>
                   {confirmDeleteId === product.id ? (
                     <div className="flex items-center gap-2 bg-red-900 text-white px-2 py-0.5 ml-2">

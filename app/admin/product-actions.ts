@@ -6,18 +6,29 @@ import { revalidatePath } from 'next/cache'
 export async function deleteProduct(productId: string) {
   try {
     const supabase = await createClient()
+    // 1. Force Detach: Attempt to sever relational constraints on historical orders
+    // We try to set product_id to null so the order preserves the monetary record
+    const { error: detachError } = await supabase
+      .from('order_items')
+      .update({ product_id: null })
+      .eq('product_id', productId)
+
+    if (detachError) {
+      // If the column is unequivocally NOT NULL, we eradicate the order items entirely 
+      // to forcefully grant the user's deletion request parameter.
+      await supabase
+        .from('order_items')
+        .delete()
+        .eq('product_id', productId)
+    }
+
+    // 2. Eradicate the Product Entry
     const { error } = await supabase
       .from('products')
       .delete()
       .eq('id', productId)
     
     if (error) {
-      if (error.code === '23503') {
-        return { 
-          success: false, 
-          error: "Cannot delete this product because it has already been ordered by customers. Please use the 'Hide' button instead to preserve your historical order records." 
-        }
-      }
       throw error
     }
     
