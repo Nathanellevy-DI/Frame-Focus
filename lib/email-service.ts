@@ -71,11 +71,13 @@ export async function sendOrderReceivedEmail(email: string, orderId: string, cus
 
     if (error) {
       console.error("❌ Resend Error (Order Received):", JSON.stringify(error))
+      throw new Error(error.message)
     } else {
       console.log(`✅ Order Received email sent to ${email}: ${data?.id}`)
     }
   } catch (err) {
     console.error("💥 Failed to send Order Received email:", err)
+    throw err
   }
 }
 
@@ -140,11 +142,13 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
 
     if (error) {
       console.error("❌ Resend Error (Status):", JSON.stringify(error))
+      throw new Error(error.message)
     } else {
       console.log(`✅ Status email (${status}) sent to ${email}: ${data?.id}`)
     }
   } catch (err) {
     console.error("💥 Failed to send status email:", err)
+    throw err
   }
 }
 
@@ -179,10 +183,12 @@ export async function sendOrderTrackingEmail(email: string, orderId: string, tra
 
     if (error) {
       console.error("❌ Resend Error (Tracking):", JSON.stringify(error))
+      throw new Error(error.message)
     } else {
       console.log(`✅ Tracking email sent to ${email}: ${data?.id}`)
     }
   } catch (err) {
     console.error("💥 Failed to send tracking email:", err)
+    throw err
   }
 }
