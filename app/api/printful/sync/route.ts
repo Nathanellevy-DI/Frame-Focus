@@ -44,6 +44,13 @@ export async function POST(req: Request) {
         .maybeSingle()
 
       let dbProductId = existingProd?.id
+
+      if (dbProductId) {
+        // Strict Isolation: User explicitly demanded that existing configured listings are NEVER touched by the Sync script.
+        // Bypassing immediately to preserve all custom variants, images, and differential prices!
+        continue
+      }
+      
       const isNewProduct = !dbProductId
 
       if (!dbProductId) {
@@ -109,14 +116,12 @@ export async function POST(req: Request) {
       if (variantInserts.length > 0) {
         await supabase.from('product_variants').insert(variantInserts)
 
-        // Only enforce base Printful Prices and Stock Images on the INITIAL import.
-        // If the product already exists, we strictly preserve the Admin's manual price overrides and custom image injections!
-        if (isNewProduct) {
-          await supabase.from('products').update({ 
-            price: lowestPrice,
-            image_urls: Array.from(allMockups)
-          }).eq('id', dbProductId)
-        }
+        // As existing items are aggressively skipped at the top of the loop, 
+        // this block is absolutely guaranteed to only fire on brand new items.
+        await supabase.from('products').update({ 
+          price: lowestPrice,
+          image_urls: Array.from(allMockups)
+        }).eq('id', dbProductId)
       }
     }
 
