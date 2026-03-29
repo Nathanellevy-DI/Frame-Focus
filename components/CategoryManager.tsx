@@ -89,7 +89,7 @@ export default function CategoryManager({ categories }: { categories: Category[]
               <div className="group flex items-center gap-2 bg-gray-900 border border-gray-800 px-3 py-2">
                 <span className="text-xs uppercase tracking-widest font-bold">{c.name}</span>
                 {c.name !== 'Uncategorized' && c.name !== 'Printful Auto-Sync' && (
-                  <div className="flex items-center gap-3 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className={`flex items-center gap-3 ml-2 transition-opacity ${confirmDeleteId === c.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                     <button 
                       onClick={() => { setEditingId(c.id); setEditName(c.name); }}
                       className="text-gray-500 hover:text-blue-400 transition-colors"
