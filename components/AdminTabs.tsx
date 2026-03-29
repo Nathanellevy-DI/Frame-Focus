@@ -8,6 +8,7 @@ import CategoryManager from '@/components/CategoryManager'
 import OrderDeleteButton from '@/components/OrderDeleteButton'
 import OrderStatusSelect from '@/components/OrderStatusSelect'
 import OrderTrackingInput from '@/components/OrderTrackingInput'
+import FinancialDashboard from '@/components/FinancialDashboard'
 
 export default function AdminTabs({ products, categories, orders }: { products: any[], categories: any[], orders: any[] }) {
   const [activeTab, setActiveTab] = useState<'manage' | 'add' | 'orders'>('manage')
@@ -100,6 +101,8 @@ export default function AdminTabs({ products, categories, orders }: { products: 
 
       {activeTab === 'orders' && (
         <section className="animate-fade-in-up max-w-4xl">
+          <FinancialDashboard orders={orders} />
+          
           <div className="bg-white text-black p-8 shadow-2xl">
             <h2 className="text-2xl font-black mb-8 tracking-tighter uppercase border-b-2 border-black pb-4 flex justify-between items-center">
               <span>Orders Ledger</span>
