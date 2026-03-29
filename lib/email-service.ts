@@ -64,6 +64,7 @@ export async function sendOrderReceivedEmail(email: string, orderId: string, cus
     const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: email,
+      bcc: 'Framesfocusprints@mail.ru',
       subject: `Order Received — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })
@@ -132,6 +133,7 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
     const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: email,
+      bcc: 'Framesfocusprints@mail.ru',
       subject: `${config.title} — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })
@@ -170,6 +172,7 @@ export async function sendOrderTrackingEmail(email: string, orderId: string, tra
     const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: email,
+      bcc: 'Framesfocusprints@mail.ru',
       subject: `Tracking Added — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })

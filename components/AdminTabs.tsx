@@ -9,6 +9,7 @@ import OrderDeleteButton from '@/components/OrderDeleteButton'
 import OrderStatusSelect from '@/components/OrderStatusSelect'
 import OrderTrackingInput from '@/components/OrderTrackingInput'
 import FinancialDashboard from '@/components/FinancialDashboard'
+import OrderEmailSwitchboard from '@/components/OrderEmailSwitchboard'
 
 export default function AdminTabs({ products, categories, orders }: { products: any[], categories: any[], orders: any[] }) {
   const [activeTab, setActiveTab] = useState<'manage' | 'add' | 'orders'>('manage')
@@ -168,9 +169,10 @@ export default function AdminTabs({ products, categories, orders }: { products: 
                       </div>
                     )}
 
-                    {/* Tracking Section */}
+                    {/* Tracking Section & Manual Emails */}
                     <div className="mb-8 p-6 bg-gray-50/50 border border-gray-100">
                       <OrderTrackingInput orderId={order.id} initialValue={order.tracking_number} />
+                      <OrderEmailSwitchboard orderId={order.id} currentTracking={order.tracking_number} />
                     </div>
 
                     {/* Items List */}

@@ -48,13 +48,8 @@ export async function updateOrderStatus(orderId: string, status: string) {
     
     console.log(`📧 Customer Email from DB: ${order?.customer_email}`);
 
-    // 2. Send email notification if valid email exists
-    if (order?.customer_email && order.customer_email !== 'pending@checkout' && order.customer_email.includes('@')) {
-      console.log(`🚀 Triggering Email to: ${order.customer_email}`);
-      await sendOrderStatusEmail(order.customer_email, orderId, status)
-    } else {
-      console.warn("⚠️ No valid customer email found. Skipping email.");
-    }
+    // Email automation has been disconnected per Admin instruction. 
+    // Status emails are now entirely manual (triggered via Admin Dashboard Buttons).
 
     revalidatePath('/admin')
     return { success: true }
@@ -85,13 +80,8 @@ export async function updateOrderTracking(orderId: string, trackingNumber: strin
       throw error;
     }
 
-    // 2. Send tracking email if valid email exists
-    if (order?.customer_email && order.customer_email !== 'pending@checkout' && order.customer_email.includes('@')) {
-      console.log(`🚀 Triggering Tracking Email to: ${order.customer_email}`);
-      await sendOrderTrackingEmail(order.customer_email, orderId, trackingNumber)
-    } else {
-      console.warn("⚠️ No valid customer email found for tracking. Skipping email.");
-    }
+    // Email automation has been disconnected per Admin instruction. 
+    // Tracking emails are now entirely manual (triggered via Admin Dashboard Buttons).
     
     revalidatePath('/admin')
     return { success: true }

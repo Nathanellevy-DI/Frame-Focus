@@ -100,11 +100,8 @@ export async function POST(req: Request) {
 
       if (itemsError) throw itemsError
 
-      // 3. Send instant "Order Received" email
-      if (email && email.includes('@')) {
-        console.log(`📧 Sending Order Received email to: ${email}`)
-        await sendOrderReceivedEmail(email, orderData.id, shippingData?.name || '')
-      }
+      // 3. Automated emails have been deactivated per Admin security requirements.
+      // E-Mails are now exclusively handled via explicit Manual Push Triggers in the Admin Dashboard.
     }
 
     return NextResponse.json({ url: paymentLink?.url })
