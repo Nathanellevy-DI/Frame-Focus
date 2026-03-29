@@ -1,9 +1,16 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const FROM_ADDRESS = process.env.EMAIL_USER || 'Framesfocusprints@mail.ru'
 
-// Sender address — change this after verifying your own domain in Resend
-const FROM_ADDRESS = 'Frame & Focus <onboarding@resend.dev>'
+const transporter = nodemailer.createTransport({
+  host: 'smtp.mail.ru',
+  port: 465,
+  secure: true, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+})
 
 /**
  * Branded email wrapper for consistent styling across all emails.
@@ -40,8 +47,8 @@ function emailLayout(content: string, orderId: string) {
  * Sent immediately when a customer places an order.
  */
 export async function sendOrderReceivedEmail(email: string, orderId: string, customerName: string) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("⚠️ RESEND_API_KEY not set. Skipping order received email.")
+  if (!process.env.EMAIL_PASSWORD) {
+    console.warn("⚠️ EMAIL_PASSWORD not set. Skipping order received email.")
     return
   }
 
@@ -61,23 +68,17 @@ export async function sendOrderReceivedEmail(email: string, orderId: string, cus
   `
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const info = await transporter.sendMail({
+      from: `"Frame & Focus" <${FROM_ADDRESS}>`,
       to: email,
-      bcc: 'Framesfocusprints@mail.ru',
+      bcc: FROM_ADDRESS,
       subject: `Order Received — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })
-
-    if (error) {
-      console.error("❌ Resend Error (Order Received):", JSON.stringify(error))
-      throw new Error(error.message)
-    } else {
-      console.log(`✅ Order Received email sent to ${email}: ${data?.id}`)
-    }
-  } catch (err) {
+    console.log(`✅ Order Received email sent to ${email}: ${info.messageId}`)
+  } catch (err: any) {
     console.error("💥 Failed to send Order Received email:", err)
-    throw err
+    throw new Error(err.message)
   }
 }
 
@@ -85,8 +86,8 @@ export async function sendOrderReceivedEmail(email: string, orderId: string, cus
  * Sent when admin changes the order status.
  */
 export async function sendOrderStatusEmail(email: string, orderId: string, status: string) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("⚠️ RESEND_API_KEY not set. Skipping status email.")
+  if (!process.env.EMAIL_PASSWORD) {
+    console.warn("⚠️ EMAIL_PASSWORD not set. Skipping status email.")
     return
   }
 
@@ -132,23 +133,17 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
   `
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const info = await transporter.sendMail({
+      from: `"Frame & Focus" <${FROM_ADDRESS}>`,
       to: email,
-      bcc: 'Framesfocusprints@mail.ru',
+      bcc: FROM_ADDRESS,
       subject: `${config.title} — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })
-
-    if (error) {
-      console.error("❌ Resend Error (Status):", JSON.stringify(error))
-      throw new Error(error.message)
-    } else {
-      console.log(`✅ Status email (${status}) sent to ${email}: ${data?.id}`)
-    }
-  } catch (err) {
+    console.log(`✅ Status email (${status}) sent to ${email}: ${info.messageId}`)
+  } catch (err: any) {
     console.error("💥 Failed to send status email:", err)
-    throw err
+    throw new Error(err.message)
   }
 }
 
@@ -156,8 +151,8 @@ export async function sendOrderStatusEmail(email: string, orderId: string, statu
  * Sent when admin adds a tracking number.
  */
 export async function sendOrderTrackingEmail(email: string, orderId: string, trackingNumber: string) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("⚠️ RESEND_API_KEY not set. Skipping tracking email.")
+  if (!process.env.EMAIL_PASSWORD) {
+    console.warn("⚠️ EMAIL_PASSWORD not set. Skipping tracking email.")
     return
   }
 
@@ -173,22 +168,16 @@ export async function sendOrderTrackingEmail(email: string, orderId: string, tra
   `
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
+    const info = await transporter.sendMail({
+      from: `"Frame & Focus" <${FROM_ADDRESS}>`,
       to: email,
-      bcc: 'Framesfocusprints@mail.ru',
+      bcc: FROM_ADDRESS,
       subject: `Tracking Added — ORD-${orderId.split('-')[0].toUpperCase()}`,
       html: emailLayout(content, orderId)
     })
-
-    if (error) {
-      console.error("❌ Resend Error (Tracking):", JSON.stringify(error))
-      throw new Error(error.message)
-    } else {
-      console.log(`✅ Tracking email sent to ${email}: ${data?.id}`)
-    }
-  } catch (err) {
+    console.log(`✅ Tracking email sent to ${email}: ${info.messageId}`)
+  } catch (err: any) {
     console.error("💥 Failed to send tracking email:", err)
-    throw err
+    throw new Error(err.message)
   }
 }
